@@ -1,0 +1,155 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %} UI pruebas {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+     <h5>Baños</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- [ Hover-table ] start -->
+
+                                <div class="card-block table-border-style">
+                                    <div class="table-responsive">
+                                        {{ view_html_table(table)|safe }}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- [ Hover-table ] end -->
+
+
+                        </div>
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock content %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}{% endblock javascripts %}
+
+
+    {% block sidebar %}
+
+    <nav class="pcoded-navbar">
+        <div class="navbar-wrapper">
+            <div class="navbar-brand header-logo">
+                <a target="_blank" href="http://www.molorramo.com/" class="b-brand">
+                    <div class="b-bg">
+                        <i class="feather icon-trending-up"></i>
+                    </div>
+                    <span class="b-title">
+                        {% if name %}
+  {{name}} says:
+  {% endif %}
+                    </span>
+                </a>
+                <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
+            </div>
+            <div class="navbar-content scroll-div">
+                <ul class="nav pcoded-inner-navbar">
+                    <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds"
+                        class="nav-item pcoded-hasmenu">
+                        <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
+                                class="feather icon-box"></i></span><span class="pcoded-mtext">Sección</span></a>
+                        <ul class="pcoded-submenu">
+                            <li class=""><a href="/index" class="">Encimeras</a></li>
+                            <li class=""><a href="/banyos" class="">Baños</a></li>
+                            <li class=""><a href="/ui-breadcrumb-pagination.html" class="">Suplementos</a></li>
+                            <li class=""><a href="/ui-collapse.html" class="">Presupuestos</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <li class="nav-item p-l-10">
+
+                    <form method="POST" action="/banyos">
+                        <div class="form-group">
+                            <label for="material">Material</label>
+                            <select    type="submit" class="form-control" id="material" name = "material">
+                                {% for material in table["MATERIAL"].unique() %}
+                                <option>{{material}}</option>
+                                {% endfor %}
+                            </select>
+ <p>
+            <input type="submit">
+        </p>
+
+                        </div>
+
+                    </form>
+
+                </li>
+                <li class="nav-item p-l-10">
+
+                    <form>
+                        <div class="form-group">
+                            <label for="color">Color</label>
+                            <select class="form-control" id="color">
+                                {% for color in table["COLOR"].unique() %}
+                                <option>{{color}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+
+                </li>
+                <li class="nav-item p-l-10">
+
+                    <form>
+                        <div class="form-group">
+                            <label for="acabado">Acabado</label>
+                            <select class="form-control" id="acabado">
+                                {% for acabado in table["ACABADO"].unique() %}
+                                <option>{{acabado}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+
+                </li>
+                <li class="nav-item p-l-10">
+
+                    <form>
+                        <div class="form-group">
+                            <label for="grosor">Grosor</label>
+                            <select class="form-control" id="grosor">
+                                {% for grosor in table["GROSOR"].unique() %}
+                                <option>{{grosor}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+
+                </li>
+            </div>
+        </div>
+    </nav>
+    {% endblock sidebar %}

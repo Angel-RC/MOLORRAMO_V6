@@ -1,0 +1,176 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Form select {% endblock %} 
+
+{% block stylesheets %}
+
+
+    <!-- data tables css -->
+    <link rel="stylesheet" href="/static/assets/plugins/data-tables/css/datatables.min.css">
+
+    <!-- select2 css -->
+    <link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.min.css">
+    <!-- multi-select css -->
+    <link rel="stylesheet" href="/static/assets/plugins/multi-select/css/multi-select.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                     <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+{% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }} </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+                            <div class="row">
+                                   <!-- [ Select2 ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card select-card">
+                                        <div class="card-header">
+                                            <h5>Encimeras</h5>
+                                        </div>
+                                        <div class="card-block">
+                                <!-- Start Forms metros -->
+                                            <form method="POST" action="/encimeras">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                   <label for="lineales">Metros Lineales</label>
+                                    <div class="input-group mb-3">
+                                    <input id= "lineales" type="number"  step="1" min="0" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                  </div>
+                                </div>
+                                    <div class="col-md-4">
+                                   <label for="cuadrados">Metros Cuadrados</label>
+                                    <div class="input-group mb-3">
+                                    <input id= "cuadrados" type="number"  step="1" min="0" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                  </div>
+                                </div>
+                                    <div class="col-md-4">
+                                   <label for="frente">Metros de Frente</label>
+                                    <div class="input-group mb-3">
+                                    <input id= "frente" type="number"  step=".01" min="0" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                  </div>
+                                </div>
+                                </div>
+ <button type="submit" class="btn btn-primary">Generar precios</button>
+
+                                     </form>
+                                <!-- End Forms metros -->
+                                              <div class="table-responsive">
+                                                  {{ view_html_table(table, clase = "display table nowrap table-striped table-hover",id="fixed-header1" )|safe }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Select2 ] end -->
+
+
+
+
+                                        </div>
+
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                                -->
+                    </div>
+                         </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+{% block javascripts %}
+
+    <!-- select2 Js -->
+    <script src="/static/assets/plugins/select2/js/select2.full.min.js"></script>
+
+    <!-- multi-select Js -->
+    <script src="/static/assets/plugins/multi-select/js/jquery.quicksearch.js"></script>
+    <script src="/static/assets/plugins/multi-select/js/jquery.multi-select.js"></script>
+
+    <!-- form-select-custom Js -->
+    <script src="/static/assets/js/pages/form-select-custom.js"></script>
+
+    <!-- datatable Js -->
+    <script src="/static/assets/plugins/data-tables/js/datatables.min.js"></script>
+    <script src="/static/assets/js/pages/tbl-datatable-custom.js"></script>
+
+
+{% endblock javascripts %}
+
+
+ {% block sidebar %}
+
+    <nav class="pcoded-navbar">
+        <div class="navbar-wrapper">
+            <div class="navbar-brand header-logo">
+                <a target="_blank" href="https://appseed.us/admin-dashboards/flask-dashboard-dattaable-pro" class="b-brand">
+                    <div class="b-bg">
+                        <i class="feather icon-trending-up"></i>
+                    </div>
+                    <span class="b-title">Molorramo</span>
+                </a>
+                <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+            </div>
+            <div class="navbar-content scroll-div">
+                <ul class="nav pcoded-inner-navbar">
+                    <li class="nav-item pcoded-menu-caption">
+                        <label>Navigation</label>
+                    </li>
+                    <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item pcoded-hasmenu active pcoded-trigger">
+                        <a href="#!" class="nav-link"><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
+                        <ul class="pcoded-submenu">
+                            <li class="active"><a href="/" class="">Encimeras</a></li>
+                            <li class=""><a href="/form-select.html" class="">Baños</a></li>
+                            <li class=""><a href="/dashboard-crm.html" class="">Suplementos</a></li>
+                            <li class=""><a href="/dashboard-analytics.html" class="">Revestimiento</a></li>
+                            <li class=""><a href="/dashboard-crypto.html" class="">Presupuestos<span class="pcoded-badge label label-danger">NEW</span></a></li>
+
+                        </ul>
+                    </li>
+                   </ul>
+                 <div class="col-xl-12 col-md-6 mb-5">
+
+<form action="" method="post" name="selection">
+      {{ form.hidden_tag() }}
+
+          <label class = "pcoded-menu-caption">Material</label>
+          {{ form.material( class = "js-example-basic-hide-search col-sm-12") }}
+
+          <label class = "pcoded-menu-caption">Color</label>
+          {{ form.color( class = "js-example-basic-hide-search col-sm-12") }}
+
+         <label class = "pcoded-menu-caption">Acabado</label>
+          {{ form.acabado( class = "js-example-basic-hide-search col-sm-12") }}
+
+         <label class = "pcoded-menu-caption">Grosor</label>
+          {{ form.grosor( class = "js-example-basic-hide-search col-sm-12") }}
+
+      <p><input type="submit" value="Sign In"></p>
+  </form>
+
+                 </div>
+            </div>
+        </div>
+    </nav>
+
+    {% endblock sidebar %}

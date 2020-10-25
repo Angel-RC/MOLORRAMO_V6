@@ -42,6 +42,11 @@ $(document).ready(function() {
         fixedHeader: true
     });
 
+    $('#fixed-header1').DataTable({
+        fixedHeader: true
+    });
+
+
     // [ Scrolling-table ] start
     $('#scrolling-table').DataTable({
         scrollY: 300,
@@ -69,3 +74,4 @@ $(document).ready(function() {
         }
     });
 });
+
