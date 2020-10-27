@@ -39,13 +39,20 @@ $(document).ready(function() {
         }
     });
     $('#fixed-header').DataTable({
-        fixedHeader: true
+        fixedHeader: true,
+        colReorder: true,
+        info:false
+
     });
 
     $('#fixed-header1').DataTable({
-        fixedHeader: true
+        "fixedHeader": true,
+        "info":     false
     });
 
+    $('#example').DataTable( {
+        "info":     false
+} );
 
     // [ Scrolling-table ] start
     $('#scrolling-table').DataTable({

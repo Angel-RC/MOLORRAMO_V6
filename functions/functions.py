@@ -2,9 +2,34 @@ import pandas as pd
 
 
 def view_html_table(table, clase="display table table-hover", id = "myTable"):
-    html = table.to_html(classes=clase,table_id = id, float_format='{:8.2f}€'.format, header=True,
-                         na_rep="", index_names=False, index=False, border=0, justify="center")
+    html = table.to_html(classes     = clase,
+                         table_id    = id,
+                         float_format='{:8.2f}€'.format,
+                         header      = True,
+                         na_rep      = "",
+                         index_names = False,
+                         index       = False,
+                         border      = 0,
+                         justify     = "center")
     return (html)
+
+
+
+def filter_data(datos, form):
+    filtered_data = datos
+
+    if (len(form.material.data) > 0 and ('MATERIAL' in datos.columns)):
+        filtered_data = filtered_data[filtered_data['MATERIAL'].isin(form.material.data)]
+    if (len(form.color.data) > 0  and ('COLOR' in datos.columns)):
+        filtered_data = filtered_data[filtered_data['COLOR'].isin(form.color.data)]
+    if (len(form.acabado.data) > 0  and ('ACABADO' in datos.columns)):
+        filtered_data = filtered_data[filtered_data['ACABADO'].isin(form.acabado.data)]
+    if (len(form.grosor.data) > 0  and ('GROSOR' in datos.columns)):
+        filtered_data = filtered_data[filtered_data['GROSOR'].isin(form.grosor.data)]
+    return (filtered_data)
+
+
+
 
 def read_data():
 

@@ -12,6 +12,10 @@
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
     <!-- Meta -->
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -25,12 +29,10 @@
     <link rel="stylesheet" href="/static/assets/fonts/fontawesome/css/fontawesome-all.min.css">
     <!-- animation css -->
     <link rel="stylesheet" href="/static/assets/plugins/animation/css/animate.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <!-- Specific CSS goes HERE -->
     {% block stylesheets %}{% endblock stylesheets %}
-
-    <!-- vendor css -->
-    <link rel="stylesheet" href="/static/assets/css/style.css">
 
 </head>
 
@@ -42,18 +44,16 @@
             <div class="loader-fill"></div>
         </div>
     </div>    
-    
-    <!--{% include 'includes/sidebar.html' %}-->
+
  {% block sidebar %} {% endblock sidebar %}
 
 
-    {% include 'includes/navigation.html' %}
+    {% block content %}{% endblock content %}
 
     {% include 'includes/header-user-list.html' %}
 
     {% include 'includes/header-chat.html' %}
 
-    {% block content %}{% endblock content %}
 
     {% include 'includes/scripts.html' %}
 

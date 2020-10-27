@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, SelectMultipleField
+from wtforms import StringField, PasswordField, SelectField, SelectMultipleField, BooleanField
 from wtforms.validators import InputRequired, Email, DataRequired
 
 ## login and registration
@@ -23,7 +23,8 @@ class CreateAccountForm(FlaskForm):
 
 
 class SelectionProductForm(FlaskForm):
-    material = SelectMultipleField('material', choices=[])
-    color    = SelectMultipleField('color', choices=[])
-    acabado  = SelectMultipleField('acabado', choices=[])
-    grosor   = SelectMultipleField('grosor', choices=[])
+    material  = SelectMultipleField('material', choices=[])
+    color     = SelectMultipleField('color', choices=[])
+    acabado   = SelectMultipleField('acabado', choices=[])
+    grosor    = SelectMultipleField('grosor', choices=[])
+    promocion = BooleanField("promocion", default="checked")
