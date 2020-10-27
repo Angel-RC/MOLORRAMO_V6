@@ -6,7 +6,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from app.home import blueprint
 
-from app.base.forms import SelectionProductForm
+from app.base.forms import SelectionProductForm, MetrosProductForm
 from flask import render_template, redirect, url_for, flash, jsonify, request
 from flask_login import login_required, current_user
 from app import login_manager
@@ -39,24 +39,37 @@ def filtro():
 def index():
 
 
-    form = SelectionProductForm()
+    SelectForm = SelectionProductForm()
+    MetrosForm = MetrosProductForm()
 
-    form.material.choices = [(item,item) for item in df["MATERIAL"].unique().tolist()]
-    form.color.choices    = [(item,item) for item in df["COLOR"].unique().tolist()]
-    form.acabado.choices  = [(item,item) for item in df["ACABADO"].unique().tolist()]
-    form.grosor.choices   = [(item,item) for item in df["GROSOR"].unique().tolist()]
+    SelectForm.material.choices = [(item,item) for item in df["MATERIAL"].unique().tolist()]
+    SelectForm.material1.choices = [(item,item) for item in df["MATERIAL"].unique().tolist()]
+    SelectForm.color.choices    = [(item,item) for item in df["COLOR"].unique().tolist()]
+    SelectForm.acabado.choices  = [(item,item) for item in df["ACABADO"].unique().tolist()]
+    SelectForm.grosor.choices   = [(item,item) for item in df["GROSOR"].unique().tolist()]
 
 
     #if not current_user.is_authenticated:
     #    return redirect(url_for('base_blueprint.login'))
     tabla=df
-    if form.validate_on_submit():
-        tabla= filter_data(df, form)
+    if SelectForm.validate_on_submit():
+        tabla = filter_data(df, SelectForm)
+        SelectForm = actualizar_items(SelectForm, tabla)
+        tabla = tabla[:5]
 
-    return render_template(template_name_or_list = 'my_form-select.html',
+    if MetrosForm.validate_on_submit():
+        tabla = calcular_precio(tabla,
+                                MetrosForm.lineales.data,
+                                MetrosForm.cuadrados.data,
+                                MetrosForm.frentes.data)
+
+        tabla=tabla[:1]
+
+    return render_template(template_name_or_list = 'tbl_foo.html',
                            view_html_table       = view_html_table,
                            table                 = tabla,
-                           form                  = form,
+                           SelectForm            = SelectForm,
+                           MetrosForm            = MetrosForm,
                            segment               = 'index')
 
 

@@ -17,7 +17,6 @@
 
 {% block content %}
 
-
 <!-- [ Main Content ] start -->
 <section class="pcoded-main-container">
     <div class="pcoded-wrapper">
@@ -35,43 +34,32 @@
                                     </div>
                                     <div class="card-block">
                                         <!-- Start Forms metros -->
-                                        <form method="POST" action="/encimeras">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label for="lineales">Metros Lineales</label>
-                                                    <div class="input-group mb-3">
-                                                        <input id="lineales" type="number" step="1" min="0"
-                                                               class="form-control"
-                                                               aria-label="Amount (to the nearest dollar)">
-                                                    </div>
+
+<form action="" method="post" name="metros">
+                                        <div class="row">
+                                           <div class="col-md-4">
+                                                <label>Metros Lineales</label>
+                                                    {{MetrosForm.lineales(class="form-control input-group mb-3")}}
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <label for="cuadrados">Metros Cuadrados</label>
-                                                    <div class="input-group mb-3">
-                                                        <input id="cuadrados" type="number" step="1" min="0"
-                                                               class="form-control"
-                                                               aria-label="Amount (to the nearest dollar)">
-                                                    </div>
+                                           <div class="col-md-4">
+                                                <label>Metros Cuadrados</label>
+                                                    {{MetrosForm.cuadrados(class="form-control input-group mb-3")}}
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <label for="frente">Metros de Frente</label>
-                                                    <div class="input-group mb-3">
-                                                        <input id="frente" type="number" step=".01" min="0"
-                                                               class="form-control"
-                                                               aria-label="Amount (to the nearest dollar)">
-                                                    </div>
+                                            <div class="col-md-4">
+                                                <label>Metros de Frente</label>
+                                                    {{MetrosForm.frentes(class="form-control input-group mb-3")}}
                                                 </div>
 
-                                            </div>
-                                        </form>
+
+                                        </div>
+
+</form>
                                         <!-- End Forms metros -->
                                         <!-- Start table -->
                                         <div class="table-responsive">
-                                            {{ view_html_table(table, clase = "display table nowrap table-striped
-                                            table-hover",id="example" )|safe }}
+                                            {{ view_html_table(table, clase = "table table-striped table-hover",id="demo-foo-filtering" )|safe }}
                                         </div>
                                         <!-- End table -->
-
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +68,6 @@
                     </div>
                     <!-- [ Main Content ] end -->
                 </div>
-
             </div>
         </div>
     </div>
@@ -114,66 +101,66 @@
 
 {% block sidebar %}
 
-<nav class="pcoded-navbar">
-    <div class="navbar-wrapper">
-        <div class="navbar-brand header-logo">
-            <a target="_blank" href="https://appseed.us/admin-dashboards/flask-dashboard-dattaable-pro" class="b-brand">
-                <div class="b-bg">
-                    <i class="feather icon-trending-up"></i>
-                </div>
-                <span class="b-title">Molorramo</span>
-            </a>
-            <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
-        </div>
-        <div class="navbar-content scroll-div">
-            <ul class="nav pcoded-inner-navbar">
-                <li class="nav-item pcoded-menu-caption">
-                    <label>Navigation</label>
-                </li>
-                <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
-                    class="nav-item pcoded-hasmenu active ">
-                    <a href="#!" class="nav-link"><span class="pcoded-micon"><i
-                            class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
-                    <ul class="pcoded-submenu">
-                        <li class="active"><a href="/" class="">Encimeras</a></li>
-                        <li class=""><a href="/form-select.html" class="">Baños</a></li>
-                        <li class=""><a href="/dashboard-crm.html" class="">Suplementos</a></li>
-                        <li class=""><a href="/dashboard-analytics.html" class="">Revestimiento</a></li>
-                        <li class=""><a href="/dashboard-crypto.html" class="">Presupuestos<span
-                                class="pcoded-badge label label-danger">NEW</span></a></li>
+<!-- Start SIDEBAR -->
 
-                    </ul>
-                </li>
-            </ul>
-            <div class="col-xl-12 col-md-6 mb-5">
+<form action="" method="post" name="selection">
+    <nav class="pcoded-navbar">
+        <div class="navbar-wrapper">
+            <div class="navbar-brand header-logo">
+                <a target="_blank" href="https://appseed.us/admin-dashboards/flask-dashboard-dattaable-pro"
+                   class="b-brand">
+                    <div class="b-bg">
+                        <i class="feather icon-trending-up"></i>
+                    </div>
+                    <span class="b-title">Molorramo</span>
+                </a>
+                <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+            </div>
+            <div class="navbar-content scroll-div">
+                <ul class="nav pcoded-inner-navbar">
+                    <li class="nav-item pcoded-menu-caption">
+                        <label>Navigation</label>
+                    </li>
+                    <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+                        class="nav-item pcoded-hasmenu active ">
+                        <a href="#!" class="nav-link"><span class="pcoded-micon"><i
+                                class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
+                        <ul class="pcoded-submenu">
+                            <li class="active"><a href="/" class="">Encimeras</a></li>
+                            <li class=""><a href="/form-select.html" class="">Baños</a></li>
+                            <li class=""><a href="/dashboard-crm.html" class="">Suplementos</a></li>
+                            <li class=""><a href="/dashboard-analytics.html" class="">Revestimiento</a></li>
+                            <li class=""><a href="/dashboard-crypto.html" class="">Presupuestos<span
+                                    class="pcoded-badge label label-danger">NEW</span></a></li>
 
-                <form action="" method="post" name="selection">
-                    {{ form.hidden_tag() }}
+                        </ul>
+                    </li>
+                </ul>
+                <div class="col-xl-12 col-md-6 mb-5">
 
-
-                    {{ form.promocion(class="form-group switch switch-primary d-inline m-r-10") }}
-                    <label>Solo Promoción</label>
-
+                    {{ SelectForm.hidden_tag() }}
 
                     <label class="pcoded-menu-caption">Material</label>
-                    {{ form.material( class = "js-example-basic-hide-search col-sm-12") }}
+                    {{ SelectForm.material( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 
                     <label class="pcoded-menu-caption">Color</label>
-                    {{ form.color( class = "js-example-basic-hide-search col-sm-12") }}
+                    {{ SelectForm.color( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 
                     <label class="pcoded-menu-caption">Acabado</label>
-                    {{ form.acabado( class = "js-example-basic-hide-search col-sm-12") }}
+                    {{ SelectForm.acabado( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 
                     <label class="pcoded-menu-caption">Grosor</label>
-                    {{ form.grosor( class = "js-example-basic-hide-search col-sm-12") }}
+                    {{ SelectForm.grosor( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 
 
                     <button type="submit" class="btn btn-primary">Al carrito</button>
-                </form>
 
+
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+
+</form>
 
 {% endblock sidebar %}
