@@ -1,0 +1,185 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} footable {% endblock %}
+
+{% block stylesheets %}
+<!-- footable css -->
+<link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.bootstrap.min.css">
+<link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.standalone.min.css">
+
+<!-- select2 css -->
+<link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.min.css">
+<!-- multi-select css -->
+<link rel="stylesheet" href="/static/assets/plugins/multi-select/css/multi-select.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<form action="" method="post" name="selection">
+    <nav class="pcoded-navbar">
+        <div class="navbar-wrapper">
+            <div class="navbar-brand header-logo">
+                <a target="_blank" href="https://appseed.us/admin-dashboards/flask-dashboard-dattaable-pro"
+                   class="b-brand">
+                    <div class="b-bg">
+                        <i class="feather icon-trending-up"></i>
+                    </div>
+                    <span class="b-title">Molorramo</span>
+                </a>
+                <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+            </div>
+            <div class="navbar-content scroll-div">
+                <ul class="nav pcoded-inner-navbar">
+                    <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+                        class="nav-item pcoded-hasmenu active ">
+                        <a href="#!" class="nav-link"><span class="pcoded-micon"><i
+                                class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
+                        <ul class="pcoded-submenu">
+                            <li class="active"><a href="/" class="">Encimeras</a></li>
+                            <li class=""><a href="/banyos" class="">Baños</a></li>
+                            <li class=""><a href="/suplementos" class="">Suplementos</a></li>
+                            <li class=""><a href="/revestimiento" class="">Revestimiento</a></li>
+                            <li class=""><a href="/presupuestos" class="">Presupuestos<span
+                                    class="pcoded-badge label label-danger">NEW</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="col-xl-12 col-md-6 mb-5">
+
+                    {{ SelectForm.hidden_tag() }}
+
+                    <label class="pcoded-menu-caption">Material</label>
+                    {{ SelectForm.material( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+
+                    <label class="pcoded-menu-caption">Color</label>
+                    {{ SelectForm.color( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+
+                    <label class="pcoded-menu-caption">Acabado</label>
+                    {{ SelectForm.acabado( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+
+                    <label class="pcoded-menu-caption">Grosor</label>
+                    {{ SelectForm.grosor( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+
+
+                    <button type="submit" name = "carrito" class="btn btn-primary">Al carrito</button>
+
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+<h1>Presupuesto</h1>
+<hr>
+
+                {% if encimeras.size > 0 %}
+                <div class="main-body">
+                    <h4>Encimeras</h4>
+<hr>
+
+                    <div class="table-responsive">
+                        {{ view_html_table(encimeras, clase = "table table-striped ",id="encimeras" )|safe }}
+                    </div>
+                </div>
+                {% endif %}
+                {% if banyos.size > 0 %}
+               <div class="main-body">
+                    <h4>Baños</h4>
+<hr>
+
+                    <div class="table-responsive">
+                        {{ view_html_table(banyos,clase = "table table-striped ", id="banyos" )|safe }}
+                    </div>
+                </div>
+                {% endif %}
+                {% if suplementos.size > 0 %}
+                <div class="main-body">
+                    <h4>Suplementos</h4>
+<hr>
+
+                    <div class="table-responsive">
+                        {{ view_html_table(suplementos, clase = "table table-striped ",id="suplementos" )|safe }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+</form>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+{% block javascripts %}
+
+
+<!-- select2 Js -->
+<script src="/static/assets/plugins/select2/js/select2.full.min.js"></script>
+
+<!-- multi-select Js -->
+<script src="/static/assets/plugins/multi-select/js/jquery.quicksearch.js"></script>
+<script src="/static/assets/plugins/multi-select/js/jquery.multi-select.js"></script>
+
+<!-- form-select-custom Js -->
+<script src="/static/assets/js/pages/form-select-custom.js"></script>
+
+<!-- footable Js -->
+<script src="/static/assets/plugins/footable/js/footable.min.js"></script>
+
+<script type="text/javascript">
+        $(document).ready(function() {
+            // [ Foo-table ]
+            $('#encimeras').footable({
+
+                "data-paging-size":30,
+                "paging": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                }
+            });
+
+        $('#suplementos').footable({
+
+                "data-paging-size":30,
+                "paging": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                }
+            });
+
+
+        $('#banyos').footable({
+
+                "data-paging-size":30,
+                "paging": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                }
+            });
+        });
+
+</script>
+
+{% endblock javascripts %}
+
+
+{% block sidebar %}
+
+<!-- Start SIDEBAR -->
+
+{% endblock sidebar %}

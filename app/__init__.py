@@ -3,7 +3,7 @@
 License: MIT
 Copyright (c) 2019 - present AppSeed.us
 """
-
+from flask_mail import Mail
 from flask import Flask, url_for
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
@@ -13,6 +13,7 @@ from os import path
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+login_manager.login_view = "login"
 
 def register_extensions(app):
     db.init_app(app)
@@ -74,6 +75,7 @@ def apply_themes(app):
 def create_app(config, selenium=False):
     app = Flask(__name__, static_folder='base/static')
     app.config.from_object(config)
+    mail = Mail(app)
     if selenium:
         app.config['LOGIN_DISABLED'] = True
     register_extensions(app)

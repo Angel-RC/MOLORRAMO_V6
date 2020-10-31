@@ -15,10 +15,12 @@ class User(db.Model, UserMixin):
 
     __tablename__ = 'User'
 
-    id = Column(Integer, primary_key=True)
+    id       = Column(Integer, primary_key=True)
     username = Column(String, unique=True)
-    email = Column(String, unique=True)
+    email    = Column(String, unique=True)
     password = Column(Binary)
+    level=Column(Integer, nullable=True)
+
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():

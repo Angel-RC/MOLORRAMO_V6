@@ -47,10 +47,7 @@ def read_data():
         .set_index('hack')
 
     suplementos = pd.read_excel(io="data/Molorramo_productos.xlsx",
-                                sheet_name="suplementos") \
-        .fillna(" ") \
-        .assign(hack='') \
-        .set_index('hack')
+                                sheet_name="suplementos")
 
     revestimiento = pd.read_excel(io="data/Molorramo_productos.xlsx",
                                 sheet_name="revestimiento") \
@@ -76,11 +73,14 @@ def read_data():
     sobrante["MEDIDA_PIEZA"] = sobrante['LARGO'].map(str) + ' X ' + sobrante['ANCHO'].map(str)
     sobrante = pd.merge(sobrante, datos, how='left',
                         on=["MATERIAL", "COLOR", "GROSOR", "ACABADO"]).assign(hack='').set_index('hack')
-    sobrante["PRECIO_ML"] =sobrante["PRECIO_ML"] * 0.75
+
     sobrante["PRECIO_M2"] =sobrante["PRECIO_M2"] * 0.75
-    sobrante.loc[sobrante["PRECIO_ML"].isnull(), 'PRECIO_ML'] = 150
     sobrante.loc[sobrante["PRECIO_M2"].isnull(), 'PRECIO_M2'] = 250
 
+    sobrante["PRECIO_METRO"] = sobrante["PRECIO_M2"]
+    sobrante["PRECIO_TABLA"] = sobrante["PRECIO_METRO"] * sobrante["LARGO"] * sobrante["ANCHO"]
+    sobrante = sobrante[["MATERIAL", "COLOR", "ACABADO", "GROSOR", "MEDIDA_PIEZA", "PRECIO_M2",
+         "PRECIO_TABLA"]]
     return (datos, suplementos, fregaderos, sobrante, revestimiento)
 
 
@@ -113,7 +113,36 @@ def calcular_precio(datos, metros_lineales, metros_cuadrados, metros_frente):
     if metros_frente > 0.0:
         datos["PRECIO_FRENTES_M2"] = (datos["PRECIO_FRENTES_M2"] + (
                     datos["SOBRANTE"] * datos["COSTE_FRENTES_M2"] / tipos_metros) / metros_frente).apply(np.ceil)
-
     return (datos)
 
 
+
+def mis_encimeras(mis_productos,metros_lineales, metros_cuadrados, metros_frente):
+    mis_productos_style = pd.DataFrame()
+    if (metros_lineales + metros_cuadrados + metros_frente > 0):
+
+        if metros_lineales > 0:
+            mis_productos["MEDIDA"] = str(metros_lineales) + " Metros lineales"
+            mis_productos["PRECIO_METRO"] = mis_productos["PRECIO_ML"]
+            mis_productos["PRECIO_TOTAL"] = mis_productos["PRECIO_METRO"] * metros_lineales
+
+            mis_productos_style = pd.concat([mis_productos_style, mis_productos])
+        if metros_cuadrados > 0:
+            mis_productos["MEDIDA"] = str(metros_cuadrados) + " Metros cuadrados"
+            mis_productos["PRECIO_METRO"] = mis_productos["PRECIO_M2"]
+            mis_productos["PRECIO_TOTAL"] = mis_productos["PRECIO_METRO"] * metros_cuadrados
+            mis_productos_style = pd.concat([mis_productos_style, mis_productos])
+
+        if metros_frente > 0:
+            mis_productos["MEDIDA"] = str(metros_frente) + " Metros de frente"
+            mis_productos["PRECIO_METRO"] = mis_productos["PRECIO_FRENTES_M2"]
+            mis_productos["PRECIO_TOTAL"] = mis_productos["PRECIO_METRO"] * metros_frente
+            mis_productos_style = pd.concat([mis_productos_style, mis_productos])
+
+        mis_productos_style["PRECIO_TOTAL"] = (mis_productos_style["PRECIO_TOTAL"]).apply(np.round)
+        mis_productos_style = mis_productos_style[mis_productos_style["PRECIO_TOTAL"] > 0.0]
+        mis_productos_style = mis_productos_style[
+            ["MATERIAL", "COLOR", "ACABADO", "GROSOR", "MEDIDA", "PRECIO_METRO",
+             "PRECIO_TOTAL"]]
+
+    return(mis_productos_style)

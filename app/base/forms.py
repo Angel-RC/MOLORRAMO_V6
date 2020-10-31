@@ -23,14 +23,13 @@ class CreateAccountForm(FlaskForm):
 
 
 class SelectionProductForm(FlaskForm):
-    material1  = SelectMultipleField('material1', choices=[])
     material  = SelectMultipleField('material', choices=[])
+    concepto  = SelectMultipleField('concepto', choices=[])
     color     = SelectMultipleField('color', choices=[])
     acabado   = SelectMultipleField('acabado', choices=[])
     grosor    = SelectMultipleField('grosor', choices=[])
     promocion = BooleanField("promocion", default="checked")
-
-class MetrosProductForm(FlaskForm):
     lineales  = FloatField("lineales",default=0.0,validators=[NumberRange(min=0, max=100)])
     cuadrados = FloatField("cuadrados",default=0.0,validators=[NumberRange(min=0, max=100)])
     frentes   = FloatField("frentes",default=0.0,validators=[NumberRange(min=0, max=100)])
+    cantidad  = FloatField("cantidad",default=0.0,validators=[NumberRange(min=0, max=100)])

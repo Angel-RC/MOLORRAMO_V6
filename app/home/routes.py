@@ -6,29 +6,18 @@ Copyright (c) 2019 - present AppSeed.us
 
 from app.home import blueprint
 
-from app.base.forms import SelectionProductForm, MetrosProductForm
-from flask import render_template, redirect, url_for, flash, jsonify, request
+from app.base.forms import SelectionProductForm
+from flask import render_template, redirect, url_for, flash, jsonify, request, session
 from flask_login import login_required, current_user
 from app import login_manager
 import flask_wtf
 import wtforms
 from jinja2 import TemplateNotFound
-import numpy
-import pandas
+import numpy as np
+import pandas as pd
 from functions.functions import *
 
 df, suplementos, fregaderos, sobrante, revestimiento = read_data()
-
-
-@blueprint.route('/filtro', methods = ["GET", "POST"])
-@login_required
-def filtro():
-    material = request.args.get('jsdata')
-    tabla = df
-    if material:
-        tabla = df.loc[df["MATERIAL"] in material]
-
-    return render_template('banyos.html', table=tabla)
 
 
 
@@ -37,46 +26,139 @@ def filtro():
 @blueprint.route('/encimeras', methods = ["POST", "GET"])
 @login_required
 def index():
+    if not current_user.is_authenticated:
+        return redirect(url_for('base_blueprint.login'))
 
 
     SelectForm = SelectionProductForm()
-    MetrosForm = MetrosProductForm()
+
 
     SelectForm.material.choices = [(item,item) for item in df["MATERIAL"].unique().tolist()]
-    SelectForm.material1.choices = [(item,item) for item in df["MATERIAL"].unique().tolist()]
     SelectForm.color.choices    = [(item,item) for item in df["COLOR"].unique().tolist()]
     SelectForm.acabado.choices  = [(item,item) for item in df["ACABADO"].unique().tolist()]
     SelectForm.grosor.choices   = [(item,item) for item in df["GROSOR"].unique().tolist()]
 
-
-    #if not current_user.is_authenticated:
-    #    return redirect(url_for('base_blueprint.login'))
-    tabla=df
+    tabla = pd.DataFrame()
     if SelectForm.validate_on_submit():
+
         tabla = filter_data(df, SelectForm)
         SelectForm = actualizar_items(SelectForm, tabla)
-        tabla = tabla[:5]
-
-    if MetrosForm.validate_on_submit():
         tabla = calcular_precio(tabla,
-                                MetrosForm.lineales.data,
-                                MetrosForm.cuadrados.data,
-                                MetrosForm.frentes.data)
+                                SelectForm.lineales.data,
+                                SelectForm.cuadrados.data,
+                                SelectForm.frentes.data)
+        tabla = mis_encimeras(tabla,
+                                SelectForm.lineales.data,
+                                SelectForm.cuadrados.data,
+                                SelectForm.frentes.data)
 
-        tabla=tabla[:1]
+    if "carrito" in request.form:
+        session["encimeras_compradas"] = tabla.to_json(orient='records')
 
-    return render_template(template_name_or_list = 'tbl_foo.html',
+
+    return render_template(template_name_or_list = '00_encimeras.html',
                            view_html_table       = view_html_table,
                            table                 = tabla,
                            SelectForm            = SelectForm,
-                           MetrosForm            = MetrosForm,
                            segment               = 'index')
 
 
 
+@blueprint.route('/banyos', methods = ["POST", "GET"])
+@login_required
+def page_banyos():
+    if not current_user.is_authenticated:
+        return redirect(url_for('base_blueprint.login'))
+
+
+    SelectForm = SelectionProductForm()
+
+
+    SelectForm.material.choices = [(item,item) for item in sobrante["MATERIAL"].unique().tolist()]
+    SelectForm.color.choices    = [(item,item) for item in sobrante["COLOR"].unique().tolist()]
+    SelectForm.acabado.choices  = [(item,item) for item in sobrante["ACABADO"].unique().tolist()]
+    SelectForm.grosor.choices   = [(item,item) for item in sobrante["GROSOR"].unique().tolist()]
+
+
+    tabla = sobrante
+    if SelectForm.validate_on_submit():
+        tabla = filter_data(tabla, SelectForm)
+        SelectForm = actualizar_items(SelectForm, tabla)
+
+
+    if "carrito" in request.form:
+        session["banyos_comprados"] = tabla.to_json(orient='records')
+
+    return render_template(template_name_or_list = '01_banyos.html',
+                           view_html_table       = view_html_table,
+                           table                 = tabla,
+                           SelectForm            = SelectForm,
+                           segment               = 'banyos')
 
 
 
+@blueprint.route('/suplementos', methods = ["POST", "GET"])
+@login_required
+def page_suplementos():
+    if not current_user.is_authenticated:
+        return redirect(url_for('base_blueprint.login'))
+
+
+    SuplementForm = SelectionProductForm()
+
+
+    SuplementForm.concepto.choices = [(item,item) for item in suplementos["CONCEPTO"].unique().tolist()]
+
+
+    tabla=suplementos
+    if SuplementForm.validate_on_submit():
+
+        tabla = tabla[tabla['CONCEPTO'].isin(SuplementForm.concepto.data)]
+
+        tabla["CANTIDAD"] = str(SuplementForm.cantidad.data) + " " + tabla["TIPO_COSTE"]
+        tabla["PRECIO_TOTAL"] = SuplementForm.cantidad.data * tabla["PRECIO_UNIDAD"]
+
+
+    if "carrito" in request.form:
+        session["suplementos_comprados"] = tabla.to_json(orient='records')
+
+    return render_template(template_name_or_list = '02_suplementos.html',
+                           view_html_table       = view_html_table,
+                           table                 = tabla,
+                           SelectForm            = SuplementForm,
+                           segment               = 'suplementos')
+
+
+@blueprint.route('/presupuestos', methods = ["POST", "GET"])
+@login_required
+def page_presupuestos():
+    if not current_user.is_authenticated:
+        return redirect(url_for('base_blueprint.login'))
+
+    SelectForm = SelectionProductForm()
+
+    encimeras = pd.DataFrame()
+    banyos = pd.DataFrame()
+    suplementos = pd.DataFrame()
+
+    if not session.get("encimeras_compradas") is None:
+        encimeras = session.get("encimeras_compradas")
+        encimeras = pd.read_json(encimeras)
+    if not session.get("banyos_comprados") is None:
+        banyos = session.get("banyos_comprados")
+        banyos = pd.read_json(banyos)
+    if not session.get("suplementos_comprados") is None:
+        suplementos = session.get("suplementos_comprados")
+        suplementos = pd.read_json(suplementos)
+
+
+    return render_template(template_name_or_list = '00_presupuestos.html',
+                           view_html_table       = view_html_table,
+                           encimeras             = encimeras,
+                           suplementos = suplementos,
+                           banyos=banyos,
+                           SelectForm            = SelectForm,
+                           segment               = 'suplementos')
 
 
 
@@ -84,8 +166,8 @@ def index():
 @blueprint.route('/<template>')
 def route_template(template):
 
-    #if not current_user.is_authenticated:
-    #    return redirect(url_for('base_blueprint.login'))
+    if not current_user.is_authenticated:
+        return redirect(url_for('base_blueprint.login'))
 
     try:
 
