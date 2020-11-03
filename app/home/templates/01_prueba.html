@@ -1,0 +1,42 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Treeview {% endblock %} 
+
+{% block stylesheets %}
+
+<!-- footable css -->
+<link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.bootstrap.min.css">
+<link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.standalone.min.css">
+
+    <!-- jstree css -->
+    <link rel="stylesheet" href="/static/assets/plugins/jstree/css/style.min.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+ <input type="text" id = "livebox">
+<table class="table" data-paging="true"></table>
+{% endblock content %}
+
+{% block javascripts %}
+
+<script src="/static/assets/plugins/footable/js/footable.min.js"></script>
+<script>
+jQuery(function($){
+    $.ajax({method:"post",
+            url:"/livesearch",
+            data:{text:$("#livebox").val()},
+            success:function(res){
+            	$('.table').footable({
+            			"columns": $.get('https://fooplugins.github.io/FooTable/docs/content/columns.json'),
+            			"rows": $.get(res)
+	            });
+            }
+	});
+});
+</script>
+    <!-- jstree Js -->
+    <script src="/static/assets/plugins/jstree/js/jstree.min.js"></script>
+    <script src="/static/assets/js/pages/ac-treeview.js"></script>
+
+{% endblock javascripts %}

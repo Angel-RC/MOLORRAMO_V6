@@ -6,6 +6,8 @@
 <!-- footable css -->
 <link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.bootstrap.min.css">
 <link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.standalone.min.css">
+<!-- notification css -->
+<link rel="stylesheet" href="/static/assets/plugins/notification/css/notification.min.css">
 
 <!-- select2 css -->
 <link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.min.css">
@@ -37,7 +39,7 @@
                                 class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
                         <ul class="pcoded-submenu">
                             <li class=""><a href="/encimeras" class="">Encimeras</a></li>
-                            <li class=""><a href="/banyos" class="">Baños</a></li>
+                            <li class=""><a href="/inventario" class="">Inventario</a></li>
                             <li class="active"><a href="/suplementos" class="">Suplementos</a></li>
                             <li class=""><a href="/revestimiento.html" class="">Revestimiento</a></li>
                             <li class=""><a href="/presupuestos" class="">Presupuestos<span
@@ -47,16 +49,15 @@
                 </ul>
                 <div class="col-xl-12 col-md-6 mb-5">
 
-                    {{ SelectForm.hidden_tag() }}
+                    {{ form.hidden_tag() }}
 <br>
                     <label class="pcoded-menu-caption">Concepto</label>
-                    {{ SelectForm.concepto( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+                    {{ form.concepto( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
      <br><br>
       <label class="pcoded-menu-caption">Cantidad</label>
-                                {{SelectForm.cantidad(class="form-control mb-3", onchange="submit()")}}
+                                {{form.cantidad(class="form-control mb-3", onchange="submit()")}}
+                    <button type="submit" name="carrito" class="btn btn-primary shadow-2 mb-4">Al carrito</button>
 
-                    <button type="submit" name = "carrito" class="btn btn-primary">Al carrito</button>
-                </div>
             </div>
         </div>
     </nav>
@@ -88,6 +89,9 @@
 {% block javascripts %}
 
 
+ <!-- notification Js -->
+    <script src="/static/assets/plugins/notification/js/bootstrap-growl.min.js"></script>
+    <script src="/static/assets/js/pages/ac-notification.js"></script>
 <!-- select2 Js -->
 <script src="/static/assets/plugins/select2/js/select2.full.min.js"></script>
 

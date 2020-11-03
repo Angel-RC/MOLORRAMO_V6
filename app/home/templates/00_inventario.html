@@ -3,6 +3,9 @@
 {% block title %} footable {% endblock %}
 
 {% block stylesheets %}
+<!-- notification css -->
+<link rel="stylesheet" href="/static/assets/plugins/notification/css/notification.min.css">
+
 <!-- footable css -->
 <link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.bootstrap.min.css">
 <link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.standalone.min.css">
@@ -37,7 +40,7 @@
                                 class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
                         <ul class="pcoded-submenu">
                             <li class=""><a href="/encimeras" class="">Encimeras</a></li>
-                            <li class="active"><a href="/banyos" class="">Baños</a></li>
+                            <li class="active"><a href="/inventario" class="">Inventario</a></li>
                             <li class=""><a href="/suplementos" class="">Suplementos</a></li>
                             <li class=""><a href="/revestimiento.html" class="">Revestimiento</a></li>
                             <li class=""><a href="/presupuestos" class="">Presupuestos<span
@@ -48,24 +51,29 @@
                 </ul>
                 <div class="col-xl-12 col-md-6 mb-5">
 
-                    {{ SelectForm.hidden_tag() }}
+                    {{ form.hidden_tag() }}
 <br>
                     <label class="pcoded-menu-caption">Material</label>
-                    {{ SelectForm.material( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+                    {{ form.material( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 <br>
                     <br>
                     <label class="pcoded-menu-caption">Color</label>
-                    {{ SelectForm.color( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+                    {{ form.color( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 <br><br>
                     <label class="pcoded-menu-caption">Acabado</label>
-                    {{ SelectForm.acabado( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+                    {{ form.acabado( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 <br><br>
                     <label class="pcoded-menu-caption">Grosor</label>
-                    {{ SelectForm.grosor( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+                    {{ form.grosor( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
+<br><br>
+                    <label class="pcoded-menu-caption">Medida Pieza</label>
+                    {{ form.medida( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 <br><br>
 
-                    <button type="submit" name = "carrito" class="btn btn-primary">Al carrito</button>
+                  <!--  <button type="submit" data-type="inverse" data-from="top" data-align="center" data-notify-icon="feather icon-shopping-cart" name = "carrito" class="btn notifications btn-primary">Al carrito</button>
+-->
 
+                      <button type="submit" name="carrito" class="btn btn-primary shadow-2 mb-4">Al carrito</button>
 
                 </div>
             </div>
@@ -81,12 +89,8 @@
             <div class="pcoded-inner-content">
 
                 <div class="main-body">
-                    <h4>Baños</h4>
+                    <h4>Inventario</h4>
 <hr>
-
-
-
-
                     <div class="table-responsive">
                         {{ view_html_table(table, clase = "table table-striped ",id="demo-foo-filtering" )|safe }}
                     </div>
@@ -105,6 +109,9 @@
 
 <!-- select2 Js -->
 <script src="/static/assets/plugins/select2/js/select2.full.min.js"></script>
+<!-- notification Js -->
+    <script src="/static/assets/plugins/notification/js/bootstrap-growl.min.js"></script>
+    <script src="/static/assets/js/pages/ac-notification.js"></script>
 
 <!-- multi-select Js -->
 <script src="/static/assets/plugins/multi-select/js/jquery.quicksearch.js"></script>

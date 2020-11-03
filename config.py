@@ -6,7 +6,6 @@ Copyright (c) 2019 - present AppSeed.us
 
 import os
 from   os import environ
-from decouple import config
 
 class Config(object):
 
@@ -39,10 +38,13 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_DURATION = 3600
 
     # PostgreSQL database
-
-    basedir    = os.path.abspath(os.path.dirname(__file__))
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'database.db')
-
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format(
+        environ.get('APPSEED_DATABASE_USER', 'wexblshovbqplg'),
+        environ.get('APPSEED_DATABASE_PASSWORD', 'd2f882c81122eecf11e18c38d45dd07fc0edb3e577f2870429f75a8f9446d1c2'),
+        environ.get('APPSEED_DATABASE_HOST', 'ec2-54-217-206-236.eu-west-1.compute.amazonaws.com'),
+        environ.get('APPSEED_DATABASE_PORT', 5432),
+        environ.get('APPSEED_DATABASE_NAME', 'd561hb6caco114')
+    )
 
 
 class DebugConfig(Config):
@@ -52,8 +54,4 @@ class DebugConfig(Config):
 config_dict = {
     'Production': ProductionConfig,
     'Debug': DebugConfig
-}
-config = {
-    'development': DebugConfig,
-    'production': ProductionConfig
 }

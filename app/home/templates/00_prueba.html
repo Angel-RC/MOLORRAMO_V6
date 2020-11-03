@@ -1,0 +1,42 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Treeview {% endblock %} 
+
+{% block stylesheets %}
+
+    <!-- jstree css -->
+    <link rel="stylesheet" href="/static/assets/plugins/jstree/css/style.min.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+{{data}}
+    <div class="container">
+    <h1>Flask-SQLAlchemy Tutorial</h1>
+      {% for user in users %}
+        <ul id="user.username">
+          <li>
+              <span class="field-name">User:</span>
+              <span class="field-value">{{ user.username }}</span>
+          </li>
+            <li>
+              <span class="field-name">level:</span>
+              <span class="field-value">{{ user.level }}</span>
+          </li>
+          <li>
+              <span class="field-name">Email:</span>
+              <span class="field-value">{{ user.email }}</span>
+          </li>
+          </ul>
+      {% endfor %}
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+
+    <!-- jstree Js -->
+    <script src="/static/assets/plugins/jstree/js/jstree.min.js"></script>
+    <script src="/static/assets/js/pages/ac-treeview.js"></script>
+
+{% endblock javascripts %}

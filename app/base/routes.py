@@ -3,7 +3,7 @@
 License: Commercial
 Copyright (c) 2019 - present AppSeed.us
 """
-
+from app.base.util import hash_pass
 from flask import jsonify, render_template, redirect, request, url_for
 from flask_login import (
     current_user,
@@ -35,11 +35,11 @@ def login():
     if 'login' in request.form:
         
         # read form data
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
 
         # Locate user
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         
         # Check the password
         if user and verify_pass( password, user.password):
@@ -57,30 +57,51 @@ def login():
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
-    login_form = LoginForm(request.form)
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:
 
-        username  = request.form['username']
-        email     = request.form['email'   ]
-
-        user = User.query.filter_by(username=username).first()
-        if user:
-            return render_template( 'accounts/register.html', msg='Username already registered', form=create_account_form)
+        email     = request.form['email']
 
         user = User.query.filter_by(email=email).first()
         if user:
-            return render_template( 'accounts/register.html', msg='Email already registered', form=create_account_form)
+            return render_template( 'accounts/register.html', msg='Email ya registrado', form=create_account_form)
 
         # else we can create the user
         user = User(**request.form)
         db.session.add(user)
         db.session.commit()
 
-        return render_template( 'accounts/register.html', msg='User created please <a href="/login">login</a>', form=create_account_form)
+        return render_template( 'accounts/register.html', msg='Cuenta creada, por favor  <a href="/login">Acceda</a>', form=create_account_form)
 
     else:
         return render_template( 'accounts/register.html', form=create_account_form)
+
+
+
+@blueprint.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    form = LoginForm(request.form)
+    if 'reset' in request.form:
+
+        email        = request.form['email']
+        password     = request.form['password']
+        password_old = request.form['password_old']
+
+        user = User.query.filter_by(email=email).first()
+
+        if user and verify_pass(password_old, user.password):
+            user.password = hash_pass(password)
+            db.session.commit()
+            return render_template('accounts/reset_password.html', msg='Contraseña cambiada', form=form)
+
+        return render_template('accounts/reset_password.html', msg='Email o contraseña incorrectos', form=form)
+
+    else:
+        return render_template('accounts/reset_password.html', form=form)
+
+
+
+
 
 @blueprint.route('/logout')
 def logout():

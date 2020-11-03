@@ -11,7 +11,7 @@ from sys import exit
 from config import config_dict
 from app import create_app, db
 
-get_config_mode = environ.get('APPSEED_CONFIG_MODE', 'Debug')
+get_config_mode = environ.get('APPSEED_CONFIG_MODE', 'Production')
 
 try:
     config_mode = config_dict[get_config_mode.capitalize()]
@@ -22,4 +22,5 @@ app = create_app(config_mode)
 Migrate(app, db)
 
 if __name__ == "__main__":
+    app.jinja_env.cache = {}
     app.run()

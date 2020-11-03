@@ -28,7 +28,28 @@ def filter_data(datos, SelectForm):
     if (len(SelectForm.grosor.data) > 0  and ('GROSOR' in datos.columns)):
         filtered_data = filtered_data[filtered_data['GROSOR'].isin(SelectForm.grosor.data)]
 
+    if (SelectForm.promocion.data):
+        filtered_data = filtered_data[filtered_data['MAXIMO_SOBRANTE'] < 0.1]
+
     return (filtered_data)
+
+
+def filter_inventario(datos, SelectForm):
+    filtered_data = datos
+
+    if (len(SelectForm.material.data) > 0 ):
+        filtered_data = filtered_data[filtered_data['MATERIAL'].isin(SelectForm.material.data)]
+    if (len(SelectForm.color.data) > 0  and ('COLOR' in datos.columns)):
+        filtered_data = filtered_data[filtered_data['COLOR'].isin(SelectForm.color.data)]
+    if (len(SelectForm.acabado.data) > 0  and ('ACABADO' in datos.columns)):
+        filtered_data = filtered_data[filtered_data['ACABADO'].isin(SelectForm.acabado.data)]
+    if (len(SelectForm.grosor.data) > 0 and ('GROSOR' in datos.columns)):
+        filtered_data = filtered_data[filtered_data['GROSOR'].isin(SelectForm.grosor.data)]
+    if (len(SelectForm.medida.data) > 0  and ('MEDIDA_PIEZA' in datos.columns)):
+        filtered_data = filtered_data[filtered_data['MEDIDA_PIEZA'].isin(SelectForm.medida.data)]
+
+    return (filtered_data)
+
 
 def actualizar_items(form, tabla):
 
@@ -36,6 +57,17 @@ def actualizar_items(form, tabla):
     form.acabado.choices  = [(item,item) for item in tabla["ACABADO"].unique().tolist()]
     form.grosor.choices   = [(item,item) for item in tabla["GROSOR"].unique().tolist()]
     return(form)
+
+def actualizar_session(session, object, tabla):
+    sesion_table = pd.DataFrame()
+    if not session.get(object) is None:
+        sesion_table = session.get(object)
+        sesion_table = pd.read_json(sesion_table)
+
+    tabla = pd.concat([tabla, sesion_table])
+    session[object] = tabla.to_json(orient='records')
+
+    return(tabla)
 
 
 def read_data():

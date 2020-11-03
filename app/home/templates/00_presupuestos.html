@@ -16,7 +16,7 @@
 
 {% block content %}
 
-<form action="" method="post" name="selection">
+<form action="" method="post" name="presupuestos">
     <nav class="pcoded-navbar">
         <div class="navbar-wrapper">
             <div class="navbar-brand header-logo">
@@ -37,7 +37,7 @@
                                 class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
                         <ul class="pcoded-submenu">
                             <li class="active"><a href="/" class="">Encimeras</a></li>
-                            <li class=""><a href="/banyos" class="">Baños</a></li>
+                            <li class=""><a href="/inventario" class="">Inventario</a></li>
                             <li class=""><a href="/suplementos" class="">Suplementos</a></li>
                             <li class=""><a href="/revestimiento" class="">Revestimiento</a></li>
                             <li class=""><a href="/presupuestos" class="">Presupuestos<span
@@ -47,23 +47,10 @@
                 </ul>
                 <div class="col-xl-12 col-md-6 mb-5">
 
-                    {{ SelectForm.hidden_tag() }}
+                    {{ form.hidden_tag() }}
 
-                    <label class="pcoded-menu-caption">Material</label>
-                    {{ SelectForm.material( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
-
-                    <label class="pcoded-menu-caption">Color</label>
-                    {{ SelectForm.color( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
-
-                    <label class="pcoded-menu-caption">Acabado</label>
-                    {{ SelectForm.acabado( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
-
-                    <label class="pcoded-menu-caption">Grosor</label>
-                    {{ SelectForm.grosor( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
-
-
-                    <button type="submit" name = "carrito" class="btn btn-primary">Al carrito</button>
-
+                   <label class="pcoded-menu-caption">P.V.P.</label>
+                                {{form.pvp( class="form-control mb-3", onchange="submit()")}}
 
                 </div>
             </div>
@@ -90,13 +77,13 @@
                     </div>
                 </div>
                 {% endif %}
-                {% if banyos.size > 0 %}
+                {% if inventario.size > 0 %}
                <div class="main-body">
-                    <h4>Baños</h4>
+                    <h4>Inventario</h4>
 <hr>
 
                     <div class="table-responsive">
-                        {{ view_html_table(banyos,clase = "table table-striped ", id="banyos" )|safe }}
+                        {{ view_html_table(inventario,clase = "table table-striped ", id="inventario" )|safe }}
                     </div>
                 </div>
                 {% endif %}
@@ -161,7 +148,7 @@
             });
 
 
-        $('#banyos').footable({
+        $('#inventario').footable({
 
                 "data-paging-size":30,
                 "paging": {
