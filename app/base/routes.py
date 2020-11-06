@@ -3,6 +3,8 @@
 License: Commercial
 Copyright (c) 2019 - present AppSeed.us
 """
+from threading import Thread
+import flask_mail
 from app.base.util import hash_pass
 from flask import jsonify, render_template, redirect, request, url_for
 from flask_login import (
@@ -133,3 +135,9 @@ def not_found_error(error):
 @blueprint.errorhandler(500)
 def internal_error(error):
     return render_template('errors/500.html'), 500
+
+
+import uuid
+
+def make_key():
+    return uuid.uuid4()

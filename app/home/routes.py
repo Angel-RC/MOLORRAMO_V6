@@ -17,9 +17,49 @@ from jinja2 import TemplateNotFound
 import numpy as np
 import pandas as pd
 from functions.functions import *
+from datetime import date
 
+today = date.today().strftime("%d/%m/%Y")
+
+class empresa:
+    def __init__(self, name, address, tlfno, mail):
+        self.name = name
+        self.address = address
+        self.tlfno = tlfno
+        self.mail = mail
 
 df, suplementos, fregaderos, sobrante, revestimiento = read_data()
+
+
+@blueprint.route('/factura', methods = ["POST", "GET"])
+@login_required
+def factura():
+    molorramo = empresa(name = "Molorramo",
+                        address = "Mota del Cuervo (Cuenca)",
+                        tlfno = "666666666",
+                        mail = "mariluz@molorramo.com")
+
+    cliente = empresa(name = "Cliente 1",
+                        address = "Burjassot (Valencia)",
+                        tlfno = "999999999",
+                        mail = "cristina@cliente1.com")
+    table=sobrante[:2]
+    table["MEDIDA"] =table["MEDIDA_PIEZA"]
+    table["TOTAL"]=table["PRECIO_TABLA"]
+    table=table[["MATERIAL","COLOR", "ACABADO", 'GROSOR', 'MEDIDA', 'TOTAL']]
+    return render_template(template_name_or_list = '00_factura.html',
+                           Molorramo = molorramo,
+                           Cliente = cliente,
+                           id_factura = 123123,
+                           view_html_table=view_html_table,
+                           today=today,
+                           table=table,
+                           total = "479.07 €",
+                           pagado ="100.00 €",
+                           a_pagar="379.07 €",
+                           segment               = 'factura')
+
+
 
 @blueprint.route('/encimeras', methods = ["POST", "GET"])
 @login_required
@@ -80,6 +120,7 @@ def page_inventario():
     if form.validate_on_submit():
         tabla = filter_inventario(tabla, form)
         form = actualizar_items(form, tabla)
+        form.medida.choices = [(item, item) for item in tabla["MEDIDA_PIEZA"].unique().tolist()]
 
     if "carrito" in request.form:
         carrito = actualizar_session(session, "inventario_comprado", tabla)
@@ -106,7 +147,7 @@ def page_suplementos():
         tabla = tabla[tabla['CONCEPTO'].isin(form.concepto.data)]
 
         tabla["CANTIDAD"] = str(form.cantidad.data) + " " + tabla["TIPO_COSTE"]
-        tabla["PRECIO_TOTAL"] = form.cantidad.data * tabla["PRECIO_UNIDAD"]
+        tabla["TOTAL"] = form.cantidad.data * tabla["PRECIO_UNIDAD"]
 
     if "carrito" in request.form:
         carrito = actualizar_session(session, "suplementos_comprados", tabla)
@@ -138,7 +179,7 @@ def page_presupuestos():
     if not session.get("encimeras_compradas") is None:
         encimeras = session.get("encimeras_compradas")
         encimeras = pd.read_json(encimeras)
-        encimeras["PRECIO_TOTAL"] = encimeras["PRECIO_TOTAL"] * (1 + pvp)
+        encimeras["TOTAL"] = encimeras["TOTAL"] * (1 + pvp)
         encimeras["PRECIO_METRO"] = encimeras["PRECIO_METRO"] * (1 + pvp)
     if not session.get("inventario_comprado") is None:
         inventario = session.get("inventario_comprado")
@@ -148,7 +189,7 @@ def page_presupuestos():
     if not session.get("suplementos_comprados") is None:
         suplementos = session.get("suplementos_comprados")
         suplementos = pd.read_json(suplementos)
-        suplementos["PRECIO_TOTAL"] = suplementos["PRECIO_TOTAL"] * (1 + pvp)
+        suplementos["TOTAL"] = suplementos["TOTAL"] * (1 + pvp)
 
     return render_template(template_name_or_list = '00_presupuestos.html',
                            view_html_table       = view_html_table,

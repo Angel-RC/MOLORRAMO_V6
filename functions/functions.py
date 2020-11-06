@@ -154,27 +154,27 @@ def mis_encimeras(mis_productos,metros_lineales, metros_cuadrados, metros_frente
     if (metros_lineales + metros_cuadrados + metros_frente > 0):
 
         if metros_lineales > 0:
-            mis_productos["MEDIDA"] = str(metros_lineales) + " Metros lineales"
+            mis_productos["MEDIDA"] = str(metros_lineales) + " M. lineales"
             mis_productos["PRECIO_METRO"] = mis_productos["PRECIO_ML"]
-            mis_productos["PRECIO_TOTAL"] = mis_productos["PRECIO_METRO"] * metros_lineales
+            mis_productos["TOTAL"] = mis_productos["PRECIO_METRO"] * metros_lineales
 
             mis_productos_style = pd.concat([mis_productos_style, mis_productos])
         if metros_cuadrados > 0:
-            mis_productos["MEDIDA"] = str(metros_cuadrados) + " Metros cuadrados"
+            mis_productos["MEDIDA"] = str(metros_cuadrados) + " M. cuadrados"
             mis_productos["PRECIO_METRO"] = mis_productos["PRECIO_M2"]
-            mis_productos["PRECIO_TOTAL"] = mis_productos["PRECIO_METRO"] * metros_cuadrados
+            mis_productos["TOTAL"] = mis_productos["PRECIO_METRO"] * metros_cuadrados
             mis_productos_style = pd.concat([mis_productos_style, mis_productos])
 
         if metros_frente > 0:
-            mis_productos["MEDIDA"] = str(metros_frente) + " Metros de frente"
+            mis_productos["MEDIDA"] = str(metros_frente) + " M. frente"
             mis_productos["PRECIO_METRO"] = mis_productos["PRECIO_FRENTES_M2"]
-            mis_productos["PRECIO_TOTAL"] = mis_productos["PRECIO_METRO"] * metros_frente
+            mis_productos["TOTAL"] = mis_productos["PRECIO_METRO"] * metros_frente
             mis_productos_style = pd.concat([mis_productos_style, mis_productos])
 
-        mis_productos_style["PRECIO_TOTAL"] = (mis_productos_style["PRECIO_TOTAL"]).apply(np.round)
-        mis_productos_style = mis_productos_style[mis_productos_style["PRECIO_TOTAL"] > 0.0]
+        mis_productos_style["TOTAL"] = (mis_productos_style["TOTAL"]).apply(np.round)
+        mis_productos_style = mis_productos_style[mis_productos_style["TOTAL"] > 0.0]
         mis_productos_style = mis_productos_style[
             ["MATERIAL", "COLOR", "ACABADO", "GROSOR", "MEDIDA", "PRECIO_METRO",
-             "PRECIO_TOTAL"]]
+             "TOTAL"]]
 
     return(mis_productos_style)

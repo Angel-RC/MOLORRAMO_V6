@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        factura
+    </title>
+  <!-- bootstrap-tagsinput-latest css -->
+    <link rel="stylesheet" href="/static/assets/plugins/bootstrap-tagsinput-latest/css/bootstrap-tagsinput.css">
+
+    <!-- animation css -->
+    <link rel="stylesheet" href="/static/assets/plugins/animation/css/animate.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- footable css -->
+<link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.bootstrap.min.css">
+<link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.standalone.min.css">
+
+
+    <link rel="stylesheet" href="/static/assets/css/factura.css">
+
+</head>
+
+<body>
+
+
+<div id="container">
+      <table class="top">
+        <tr class="row">
+          <td>
+            <section id="invoice-title-number">
+
+              <span id="title">Molorramo</span>
+
+              <div class="clearfix"></div>
+
+              <div class="separator"></div>
+
+              <span id="number"> ID: {{id_factura}}</span>
+
+              <span class="hidden">{issue_date_label}</span>
+              <span class="issue-date">{{today}}</span>
+
+              <div class="line"></div>
+
+            </section>
+
+            <section id="invoice-info">
+              <div class="invoice-info-table">
+                <div>
+                  <span>Fecha de medida</span>
+                  <br>
+                  <span>{{today}}</span>
+                </div>
+                <span></span>
+                <div>
+                  <span>Fecha de montaje</span>
+                  <br>
+                  <span>{{today}}</span>
+                </div>
+                <span></span>
+                <div>
+                  <span>Otra cosa</span>
+                  <br>
+                  <span>Algo mas </span>
+                </div>
+
+              </div>
+            </section>
+          </td>
+          <td>
+
+            <div class="company-info">
+              <span>Emisor:</span>
+               <div>{{Molorramo.name}}</div>
+             <div>{{Molorramo.address}}</div>
+              <div>{{Molorramo.tlfno}}</div>
+              <div>{{Molorramo.mail}}</div>
+            </div>
+
+            <br>
+            <div class="company-info">
+              <span>Receptor:</span>
+              <div>{{Cliente.name}}</div>
+              <div>{{Cliente.address}}</div>
+              <div>{{Cliente.tlfno}}</div>
+              <div>{{Cliente.mail}}</div>
+            </div>
+          </td>
+        </tr>
+
+
+      </table>
+   <div class="clearfix"></div>
+        <ul>
+              <li>Las piezas seleccionadas serán reservadas por un plazo de 30 días. Despues de dicho periodo, la reserva se cancelara.</li>
+</ul>
+    <br><br>
+
+
+
+
+
+        
+
+       {{ view_html_table(table, clase = "table table-striped ",id="demo-foo-filtering" )|safe }}
+          
+
+
+      <section id="sums">
+
+        <table cellpadding="0" cellspacing="0">
+
+          <tr class="amount-total">
+            <th>Total:</th>
+            <td>{{total}}</td>
+            <td></td>
+          </tr>
+          
+          <!-- You can use attribute data-hide-on-quote="true" to hide specific information on quotes.
+               For example Invoicebus doesn't need amount paid and amount due on quotes  -->
+          <tr data-hide-on-quote="true">
+            <th>Pagado:</th>
+            <td>{{pagado}}</td>
+            <td></td>
+          </tr>
+          
+          <tr data-hide-on-quote="true">
+            <th>Falta por pagar:</th>
+            <td>{{a_pagar}}</td>
+            <td></td>
+          </tr>
+          
+        </table>
+
+      </section>
+
+
+
+
+</div>
+
+   <!-- form-advance custom js -->
+    <script src="/static/assets/js/pages/form-advance-custom.js"></script>
+<!-- footable Js -->
+<script src="/static/assets/plugins/footable/js/footable.min.js"></script>
+
+<script type="text/javascript">
+        $(document).ready(function() {
+            // [ Foo-table ]
+            $('#demo-foo-filtering').footable({
+
+                "data-paging-size":30,
+                "paging": {
+                    "enabled": true
+                },
+                "sorting": {
+                    "enabled": true
+                }
+            });
+        });
+
+</script>
+</body>
+</html>
+

@@ -36,16 +36,16 @@
                         <a href="#!" class="nav-link"><span class="pcoded-micon"><i
                                 class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
                         <ul class="pcoded-submenu">
-                            <li class="active"><a href="/" class="">Encimeras</a></li>
+                            <li class=""><a href="/" class="">Encimeras</a></li>
                             <li class=""><a href="/inventario" class="">Inventario</a></li>
                             <li class=""><a href="/suplementos" class="">Suplementos</a></li>
                             <li class=""><a href="/revestimiento" class="">Revestimiento</a></li>
-                            <li class=""><a href="/presupuestos" class="">Presupuestos<span
+                            <li class="active"><a href="/presupuestos" class="">Mi pedido<span
                                     class="pcoded-badge label label-danger">NEW</span></a></li>
                         </ul>
                     </li>
                 </ul>
-                <div class="col-xl-12 col-md-6 mb-5">
+                <div class="col-xl-12 ">
 
                     {{ form.hidden_tag() }}
 
@@ -64,7 +64,7 @@
     <div class="pcoded-wrapper">
         <div class="pcoded-content">
             <div class="pcoded-inner-content">
-<h1>Presupuesto</h1>
+<h1>Mi pedido</h1>
 <hr>
 
                 {% if encimeras.size > 0 %}
