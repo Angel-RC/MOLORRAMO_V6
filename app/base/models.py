@@ -14,7 +14,7 @@ from marshmallow import Schema, fields, post_load
 
 class User(db.Model, UserMixin):
 
-    __tablename__ = 'usuarios'
+    __tablename__ = 'user'
 
     id       = Column(Integer, primary_key=True)
     username = Column(String, nullable=True)
@@ -41,9 +41,9 @@ class User(db.Model, UserMixin):
         return str(self.email)
 
 
-@post_load
-def create_person(self, data, **kwargs):
-    return User(**data)
+    @post_load
+    def create_person(self, data, **kwargs):
+        return User(**data)
 
 class Encimeras(db.Model):
     __tablename__ = 'encimeras'

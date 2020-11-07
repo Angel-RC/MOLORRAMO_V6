@@ -1,7 +1,7 @@
 
 
 from sqlalchemy import create_engine, MetaData, Table
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker,clear_mappers
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 
 # para ejecutar SQL
@@ -9,14 +9,21 @@ db = scoped_session(sessionmaker(bind=engine))
 db.execute("commit;")
 
 # para usar pandas
-df.to_sql('usuarios2', con=engine, if_exists="replace", index_label = "ID")
-da = pd.read_sql('usuarioss', engine)
+df.to_sql('usuarios', con=engine, if_exists="replace", index_label = "ID")
+da = pd.read_sql('user', engine)
 
 username =["Angel", "Javier", "Mari Luz"]
 email = ["angel.r.chicote@gmail", "javier@molorramo.com","mariluz@molorramo.com"]
 level = [10, 9,9]
 password = [hash_pass("hola1919"), hash_pass("Molo2020"), hash_pass("Molo2020")]
 id=[0,1,2]
+from sqlalchemy.orm import mapper, sessionmaker
+metadata = MetaData(engine)
+from sqlalchemy import Column, Integer
+
+
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 df = pd.DataFrame(list(zip(username, email,level,password)),
@@ -44,14 +51,6 @@ database = "qado842"
 cursor=db.cursor()
 cursor.execute("drop table usuarios;")
 
-CREATE TABLE usuarios (
-    ID int NOT NULL,
-    USERNAME varchar(255) NOT NULL,
-    EMAIL varchar(255),
-    LEVEL int default 0,
-    PRIMARY KEY (ID),
-    PASSWORD BINARY
-);
 
 a=cursor.execute("select * from usuarios;")
 
