@@ -6,6 +6,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 import os
 from   os import environ
+import pymysql
 
 class Config(object):
 
@@ -14,7 +15,7 @@ class Config(object):
     SECRET_KEY = 'key'
 
     # This will create a file in <app> FOLDER
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'database.db')
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://qado842:Molorramo20@qado842.molorramo.com/qado842?charset=utf8mb4'
 
     # For 'in memory' database, please use:
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
@@ -45,6 +46,8 @@ class ProductionConfig(Config):
         environ.get('APPSEED_DATABASE_PORT', 5432),
         environ.get('APPSEED_DATABASE_NAME', 'd561hb6caco114')
     )
+
+    #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://qado842:Molorramo20@qado842.molorramo.com/qado842?charset=utf8mb4'
 
 
 class DebugConfig(Config):

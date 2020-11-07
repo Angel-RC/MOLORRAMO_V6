@@ -41,15 +41,9 @@ class User(db.Model, UserMixin):
         return str(self.email)
 
 
-class UserSchema(Schema):
-    id = fields.Integer()
-    username = fields.String()
-    email = fields.String()
-    level = fields.Integer()
-
-    @post_load
-    def create_person(self, data, **kwargs):
-        return User(**data)
+@post_load
+def create_person(self, data, **kwargs):
+    return User(**data)
 
 class Encimeras(db.Model):
     __tablename__ = 'encimeras'

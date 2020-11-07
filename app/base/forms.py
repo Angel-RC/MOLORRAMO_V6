@@ -43,5 +43,6 @@ class SelectionSuplementosForm(FlaskForm):
     carrito = SubmitField('carrito')
 
 
-class PresupuestosForm(FlaskForm):
+class FacturasForm(FlaskForm):
     pvp = FloatField("pvp", default = 0.0)
+    confirmar = SubmitField('confirmar')

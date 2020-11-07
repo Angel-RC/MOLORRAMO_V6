@@ -10,6 +10,37 @@
 
 {% block content %}
 
+    <nav class="pcoded-navbar">
+        <div class="navbar-wrapper">
+            <div class="navbar-brand header-logo">
+                <a target="_blank" href="http://www.molorramo.com/"
+                   class="b-brand">
+                    <div class="b-bg">
+                        <i class="feather icon-trending-up"></i>
+                    </div>
+                    <span class="b-title">Molorramo</span>
+                </a>
+                <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+            </div>
+            <div class="navbar-content scroll-div">
+                <ul class="nav pcoded-inner-navbar">
+                    <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+                        class="nav-item pcoded-hasmenu active ">
+                        <a href="#!" class="nav-link"><span class="pcoded-micon"><i
+                                class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
+                        <ul class="pcoded-submenu">
+                            <li class="active"><a href="/" class="">Encimeras</a></li>
+                            <li class=""><a href="/inventario" class="">Inventario</a></li>
+                            <li class=""><a href="/suplementos" class="">Suplementos</a></li>
+                            <li class=""><a href="/revestimiento" class="">Revestimiento</a></li>
+                            <li class=""><a href="/factura" class="">Mi pedido</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <!-- [ Main Content ] start -->
     <section class="pcoded-main-container">
         <div class="pcoded-wrapper">
@@ -23,11 +54,6 @@
                                     <div class="page-header-title">
                                         <h5 class="m-b-10">Invoice List</h5>
                                     </div>
-                                    <ul class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="#!">Invoice</a></li>
-                                        <li class="breadcrumb-item"><a href="#!">Invoice List</a></li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -37,199 +63,8 @@
                         <div class="page-wrapper">
                             <!-- [ Main Content ] start -->
                             <div class="row">
-                                <!-- [ Invoice-list ] start -->
-                                <div class="col-xl-3 col-lg-12">
-                                    <div class="card task-board-left">
-                                        <div class="card-header">
-                                            <h5>Search Box</h5>
-                                        </div>
-                                        <div class="card-block">
-                                            <div class="input-group mb-3">
-                                                <input type="text" class="form-control add_task_todo" placeholder="Search here..." required="">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary btn-icon btn-msg-send" type="button"><i class="fas fa-search"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="task-right">
-                                                <div class="task-right-header-status">
-                                                    <span class="f-w-400" data-toggle="collapse">Completed Status</span>
-                                                    <i class="fas fa-caret-down float-right m-t-5"></i>
-                                                </div>
-                                                <div class="taskboard-right-progress">
-                                                    <h6 class="m-t-10">Highest Priority</h6>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <h6 class="m-t-15">High priority</h6>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <h6 class="m-t-15">Normal priority</h6>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <h6 class="m-t-15">Low priority</h6>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="task-right-header-users">
-                                                    <span class="f-w-400" data-toggle="collapse">Assign Users</span>
-                                                    <i class="fas fa-caret-down float-right m-t-5"></i>
-                                                </div>
-                                                <div class="user-box assign-user taskboard-right-users">
-                                                    <div class="media mb-2">
-                                                        <div class="media-left media-middle mr-3">
-                                                            <a href="#!">
-                                                                <img class="media-object img-radius" src="/static/assets/images/user/avatar-1.jpg" alt="Generic placeholder image">
-                                                                <div class="live-status bg-danger"></div>
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6>Josephin Doe</h6>
-                                                            <p>Santa Ana,CA</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="media mb-2">
-                                                        <div class="media-left media-middle mr-3">
-                                                            <a href="#!">
-                                                                <img class="media-object img-radius" src="/static/assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
-                                                                <div class="live-status bg-success"></div>
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6>Josephin Doe</h6>
-                                                            <p>Huntingston, NJ</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="media mb-2">
-                                                        <div class="media-left media-middle mr-3">
-                                                            <a href="#!">
-                                                                <img class="media-object img-radius" src="/static/assets/images/user/avatar-3.jpg" alt="Generic placeholder image">
-                                                                <div class="live-status bg-danger"></div>
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6>Josephin Doe</h6>
-                                                            <p>Willingstion, WA</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="media mb-2">
-                                                        <div class="media-left media-middle mr-3">
-                                                            <a href="#!">
-                                                                <img class="media-object img-radius" src="/static/assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
-                                                                <div class="live-status bg-success"></div>
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6>Josephin Doe</h6>
-                                                            <p>Illions, IL</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="task-right-header-revision">
-                                                    <span class="f-w-400" data-toggle="collapse">Revision</span>
-                                                    <i class="fas fa-caret-down float-right m-t-5"></i>
-                                                </div>
-                                                <div class="taskboard-right-revision user-box">
-                                                    <div class="media">
-                                                        <div class="media-left">
-                                                            <a class="btn btn-outline-primary btn-icon" href="#!" role="button"><i class="fas fa-cogs"></i>
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <div class="chat-header f-w-400 mb-1">Drop the IE specific hacks for temporal inputs</div>
-                                                            <p class="chat-header  text-muted">4 minutes ago</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="media">
-                                                        <div class="media-left">
-                                                            <a class="btn btn-outline-danger btn-icon" href="#!" role="button"><i class="fas fa-share-alt"></i>
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <div class="chat-header f-w-400 mb-1">Have Carousel ignore keyboard events</div>
-                                                            <p class="chat-header text-muted">12 Dec,2015</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="media">
-                                                        <div class="media-left">
-                                                            <a class="btn btn-outline-warning btn-icon" href="#!" role="button"><i class="fas fa-font"></i>
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <div class="chat-header f-w-400 mb-1">Add full font overrides for popovers and tooltips</div>
-                                                            <p class="chat-header text-muted">2 month ago</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="media">
-                                                        <div class="media-left">
-                                                            <a class="btn btn-outline-success btn-icon" href="#!" role="button"><i class="fas fa-mobile-alt"></i>
-                                                            </a>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <div class="chat-header">Responsive Asssignment</div>
-                                                            <p class="chat-header  text-muted">6 month ago</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-9 col-lg-12 filter-bar invoice-list">
-                                    <nav class="navbar m-b-30 p-10">
-                                        <ul class="nav">
-                                            <li class="nav-item f-text active">
-                                                <a class="nav-link text-secondary" href="#!">Filter: <span class="sr-only">(current)</span></a>
-                                            </li>
-                                            <li class="nav-item dropdown">
-                                                <a class="nav-link dropdown-toggle text-secondary" href="#!" id="bydate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i> By Date</a>
-                                                <div class="dropdown-menu" aria-labelledby="bydate">
-                                                    <a class="dropdown-item" href="#!">Show all</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#!">Today</a>
-                                                    <a class="dropdown-item" href="#!">Yesterday</a>
-                                                    <a class="dropdown-item" href="#!">This week</a>
-                                                    <a class="dropdown-item" href="#!">This month</a>
-                                                    <a class="dropdown-item" href="#!">This year</a>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item dropdown">
-                                                <a class="nav-link dropdown-toggle text-secondary" href="#!" id="bystatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-chart-line"></i> By Status</a>
-                                                <div class="dropdown-menu" aria-labelledby="bystatus">
-                                                    <a class="dropdown-item" href="#!">Show all</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#!">Open</a>
-                                                    <a class="dropdown-item" href="#!">On hold</a>
-                                                    <a class="dropdown-item" href="#!">Resolved</a>
-                                                    <a class="dropdown-item" href="#!">Closed</a>
-                                                    <a class="dropdown-item" href="#!">Dublicate</a>
-                                                    <a class="dropdown-item" href="#!">Wontfix</a>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item dropdown">
-                                                <a class="nav-link dropdown-toggle text-secondary" href="#!" id="bypriority" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-list-ol"></i> By Priority</a>
-                                                <div class="dropdown-menu" aria-labelledby="bypriority">
-                                                    <a class="dropdown-item" href="#!">Show all</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#!">Highest</a>
-                                                    <a class="dropdown-item" href="#!">High</a>
-                                                    <a class="dropdown-item" href="#!">Normal</a>
-                                                    <a class="dropdown-item" href="#!">Low</a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="nav-item nav-grid f-view">
-                                            <span class="m-r-15">View Mode: </span>
-                                            <button type="button" class="btn btn-primary btn-icon m-0" data-toggle="tooltip" data-placement="top" title="list view">
-                                                <i class="fas fa-list-ul"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-primary btn-icon m-0" data-toggle="tooltip" data-placement="top" title="grid view">
-                                                <i class="fas fa-th-large"></i>
-                                            </button>
-                                        </div>
-                                    </nav>
+ <!-- [ Invoice-list ] start -->
+
                                     <div class="row">
                                         <div class="col-md-6 col-sm-12">
                                             <div class="card card-border-c-blue">
@@ -492,7 +327,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-12">
-                                            <div class="card card-border-c-blue">
+                                        <div class="card card-border-c-blue">
                                                 <div class="card-block">
                                                     <div class="mb-3">
                                                         <h5 class="d-inline-block m-b-10">John Doe</h5>
@@ -544,7 +379,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
                                 <!-- [ Invoice-list ] end -->
                             </div>
                             <!-- [ Main Content ] end -->

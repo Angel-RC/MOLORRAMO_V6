@@ -6,8 +6,8 @@ Copyright (c) 2019 - present AppSeed.us
 
 from app import db
 from app.home import blueprint
-from app.base.models import User, Encimeras, UserSchema
-from app.base.forms import SelectionEncimerasForm, PresupuestosForm, SelectionInventarioForm, SelectionSuplementosForm
+from app.base.models import User, Encimeras
+from app.base.forms import SelectionEncimerasForm, FacturasForm, SelectionInventarioForm, SelectionSuplementosForm
 from flask import render_template, redirect, url_for, flash, jsonify, request, session
 from flask_login import login_required, current_user
 from app import login_manager
@@ -34,6 +34,8 @@ df, suplementos, fregaderos, sobrante, revestimiento = read_data()
 @blueprint.route('/factura', methods = ["POST", "GET"])
 @login_required
 def factura():
+    form = FacturasForm()
+
     molorramo = empresa(name = "Molorramo",
                         address = "Mota del Cuervo (Cuenca)",
                         tlfno = "666666666",
@@ -43,21 +45,45 @@ def factura():
                         address = "Burjassot (Valencia)",
                         tlfno = "999999999",
                         mail = "cristina@cliente1.com")
-    table=sobrante[:2]
-    table["MEDIDA"] =table["MEDIDA_PIEZA"]
-    table["TOTAL"]=table["PRECIO_TABLA"]
-    table=table[["MATERIAL","COLOR", "ACABADO", 'GROSOR', 'MEDIDA', 'TOTAL']]
+
+    encimeras   = pd.DataFrame()
+    inventario  = pd.DataFrame()
+    suplementos = pd.DataFrame()
+
+    pvp = 0.0
+    if form.validate_on_submit():
+        pvp = form.pvp.data / 100
+
+    if not session.get("encimeras_compradas") is None:
+        encimeras = session.get("encimeras_compradas")
+        encimeras = pd.read_json(encimeras)
+        encimeras["TOTAL"] = encimeras["TOTAL"] * (1 + pvp)
+        encimeras["PRECIO_METRO"] = encimeras["PRECIO_METRO"] * (1 + pvp)
+    if not session.get("inventario_comprado") is None:
+        inventario = session.get("inventario_comprado")
+        inventario = pd.read_json(inventario)
+        inventario["PRECIO_M2"] = inventario["PRECIO_M2"] * (1 + pvp)
+        inventario["PRECIO_TABLA"] = inventario["PRECIO_TABLA"] * (1 + pvp)
+    if not session.get("suplementos_comprados") is None:
+        suplementos = session.get("suplementos_comprados")
+        suplementos = pd.read_json(suplementos)
+        suplementos["TOTAL"] = suplementos["TOTAL"] * (1 + pvp)
+
+
     return render_template(template_name_or_list = '00_factura.html',
-                           Molorramo = molorramo,
-                           Cliente = cliente,
-                           id_factura = 123123,
-                           view_html_table=view_html_table,
-                           today=today,
-                           table=table,
-                           total = "479.07 €",
-                           pagado ="100.00 €",
-                           a_pagar="379.07 €",
-                           segment               = 'factura')
+                           Molorramo       = molorramo,
+                           Cliente         = cliente,
+                           id_factura      = 123123,
+                           view_html_table = view_html_table,
+                           today           = today,
+                           form            = form,
+                           encimeras       = encimeras,
+                           inventario      = inventario,
+                           suplementos     = suplementos,
+                           total           = "479.07 €",
+                           pagado          = "100.00 €",
+                           a_pagar         = "379.07 €",
+                           segment         = 'factura')
 
 
 
@@ -157,6 +183,14 @@ def page_suplementos():
                            table                 = tabla,
                            form                  = form,
                            segment               = 'suplementos')
+
+
+@blueprint.route('/panel', methods=["POST", "GET"])
+@login_required
+def panel():
+    return render_template(template_name_or_list = '00_panel.html',
+                           segment               = 'panel')
+
 
 
 @blueprint.route('/presupuestos', methods=["POST", "GET"])
