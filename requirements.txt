@@ -39,3 +39,4 @@ xhtml2pdf==0.2.5
 xlrd==1.2.0
 flask_marshmallow
 pymysql
+psycopg2
