@@ -5,11 +5,12 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from flask_login import UserMixin
-from sqlalchemy import Binary, Column, Integer, String, Float, Date
+from sqlalchemy import Binary, Column, Integer, String, Float, Date, ForeignKey
 from app import db, login_manager
 from app.base.util import hash_pass
 from marshmallow import Schema, fields, post_load
 
+from sqlalchemy.orm import relationship
 
 
 class User(db.Model, UserMixin):
@@ -22,6 +23,7 @@ class User(db.Model, UserMixin):
     email    = Column(String, unique=True)
     password = Column(Binary)
     level    = Column(Integer, nullable = True, default = 0)
+    pedidos  = relationship("Pedido",  back_populates="User")
 
 
     def __init__(self, **kwargs):
@@ -54,11 +56,12 @@ class Pedido(db.Model):
 
     id_pedido      = Column(Integer, primary_key = True)
     estado         = Column(String,  nullable = True)
-    id_cliente     = Column(Integer, nullable = False)
+    id_cliente     = Column(Integer, ForeignKey('usuarios.id'))
     fecha_pedido   = Column(Date,    nullable = False)
     fecha_medicion = Column(Date,    nullable = True)
     fecha_entrega  = Column(Date,    nullable = True)
-
+    User           = relationship("User", back_populates="pedidos")
+    Encimeras_compradas  = relationship("Encimeras_compradas",  back_populates="Pedido")
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
@@ -157,13 +160,14 @@ class Encimeras_compradas(db.Model):
 
 
     column_not_exist_in_db = Column(Integer, primary_key=True)
-    id_pedido     = Column(Integer, nullable = False)
+    id_pedido     = Column(Integer, ForeignKey(Pedido.id_pedido))
     MATERIAL      = Column(String,  nullable = False)
     COLOR         = Column(String,  nullable = False)
     ACABADO       = Column(String,  nullable = True)
     GROSOR        = Column(String,  nullable = True)
     MEDIDA        = Column(String,  nullable = True)
     TOTAL         = Column(Float,   nullable = True)
+    Pedido        = relationship("Pedido", back_populates="Encimeras_compradas")
 
 
     def __init__(self, **kwargs):

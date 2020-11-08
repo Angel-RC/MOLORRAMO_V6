@@ -8,6 +8,8 @@ from flask_migrate import Migrate
 from os import environ
 from sys import exit
 
+from flask_marshmallow import Marshmallow
+
 from config import config_dict
 from app import create_app, db
 
@@ -19,6 +21,7 @@ except KeyError:
     exit('Error: Invalid APPSEED_CONFIG_MODE environment variable entry.')
 
 app = create_app(config_mode) 
+ma = Marshmallow(app)
 Migrate(app, db)
 
 if __name__ == "__main__":

@@ -87,6 +87,18 @@ def factura():
 
 
 
+@blueprint.route('/encimeras1', methods = ["POST", "GET"])
+@login_required
+def index1():
+
+
+    return render_template(template_name_or_list = '01_encimeras.html',
+                           segment               = 'index1')
+
+
+
+
+
 @blueprint.route('/encimeras', methods = ["POST", "GET"])
 @login_required
 def index():

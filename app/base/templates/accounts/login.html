@@ -30,6 +30,9 @@
                 </div>
                 <h3 class="mb-4">Login</h3>
                <form role="form" method="post" action="">
+                   {% if msg %}
+                            {{ msg | safe }}
+                        {% endif %}
 
                         {{ form.hidden_tag() }}
 

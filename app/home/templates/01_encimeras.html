@@ -3,9 +3,14 @@
 {% block title %} footable {% endblock %}
 
 {% block stylesheets %}
+  <!-- bootstrap-tagsinput-latest css -->
+    <link rel="stylesheet" href="/static/assets/plugins/bootstrap-tagsinput-latest/css/bootstrap-tagsinput.css">
+
 <!-- footable css -->
 <link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.bootstrap.min.css">
 <link rel="stylesheet" href="/static/assets/plugins/footable/css/footable.standalone.min.css">
+ <!-- notification css -->
+<link rel="stylesheet" href="/static/assets/plugins/notification/css/notification.min.css">
 
 <!-- select2 css -->
 <link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.min.css">
@@ -40,15 +45,12 @@
                             <li class=""><a href="/inventario" class="">Inventario</a></li>
                             <li class=""><a href="/suplementos" class="">Suplementos</a></li>
                             <li class=""><a href="/revestimiento" class="">Revestimiento</a></li>
-                            <li class=""><a href="/presupuestos" class="">Presupuestos<span
-                                    class="pcoded-badge label label-danger">NEW</span></a></li>
-
+                            <li class=""><a href="/factura" class="">Mi pedido</a></li>
                         </ul>
                     </li>
                 </ul>
-                <div class="col-xl-12 col-md-6 mb-5">
-
-                    {{ form.hidden_tag() }}
+                <div class="col-xl-12">
+                    {{ form.hidden_tag()}}
 <br>
                     <label class="pcoded-menu-caption">Material</label>
                     {{ form.material( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
@@ -63,7 +65,8 @@
                     {{ form.grosor( class = "js-example-basic-hide-search col-sm-12", onchange="submit()") }}
 
 <br><br>
-                    <button type="submit" name = "carrito" class="btn btn-primary">Al carrito</button>
+                     <button type="submit" name="carrito" class="btn btn-primary shadow-2 mb-4">Al carrito</button>
+
 
 
                 </div>
@@ -98,9 +101,14 @@
 
 
                         </div>
+ <div class="form-group">
+                                                        <div class="switch switch-primary d-inline m-r-10">
 
-
-
+                    {{form.promocion(type = "checkbox", id="switch-p-1",onchange="submit()")}}
+                                                            <label for="switch-p-1" class="cr"></label>
+                                                        </div>
+                                                        <label>Promoción</label>
+                                                    </div>
                     <div class="table-responsive">
                         {{ view_html_table(table, clase = "table table-striped ",id="demo-foo-filtering" )|safe }}
                     </div>
@@ -126,6 +134,11 @@
 
 <!-- form-select-custom Js -->
 <script src="/static/assets/js/pages/form-select-custom.js"></script>
+ <!-- notification Js -->
+    <script src="/static/assets/plugins/notification/js/bootstrap-growl.min.js"></script>
+    <script src="/static/assets/js/pages/ac-notification.js"></script>
+   <!-- form-advance custom js -->
+    <script src="/static/assets/js/pages/form-advance-custom.js"></script>
 
 <!-- footable Js -->
 <script src="/static/assets/plugins/footable/js/footable.min.js"></script>
