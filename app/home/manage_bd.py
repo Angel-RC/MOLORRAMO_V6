@@ -10,7 +10,7 @@ db.execute("commit;")
 
 # para usar pandas
 df.to_sql('usuarios', con=engine, if_exists="replace", index_label = "ID")
-da = pd.read_sql('user', engine)
+da = pd.read_sql('usuarios5', engine)
 
 username =["Angel", "Javier", "Mari Luz"]
 email = ["angel.r.chicote@gmail", "javier@molorramo.com","mariluz@molorramo.com"]

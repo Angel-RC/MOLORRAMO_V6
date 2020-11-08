@@ -6,7 +6,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from app import db
 from app.home import blueprint
-from app.base.models import User, Encimeras
+from app.base.models import *
 from app.base.forms import SelectionEncimerasForm, FacturasForm, SelectionInventarioForm, SelectionSuplementosForm
 from flask import render_template, redirect, url_for, flash, jsonify, request, session
 from flask_login import login_required, current_user
