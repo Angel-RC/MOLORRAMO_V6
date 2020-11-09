@@ -51,6 +51,7 @@ def factura():
     suplementos = pd.DataFrame()
 
     pvp = 0.0
+    total = 0.0
     if form.validate_on_submit():
         pvp = form.pvp.data / 100
 
@@ -59,15 +60,18 @@ def factura():
         encimeras = pd.read_json(encimeras)
         encimeras["TOTAL"] = encimeras["TOTAL"] * (1 + pvp)
         encimeras["PRECIO_METRO"] = encimeras["PRECIO_METRO"] * (1 + pvp)
+        total = total + encimeras["TOTAL"].sum()
     if not session.get("inventario_comprado") is None:
         inventario = session.get("inventario_comprado")
         inventario = pd.read_json(inventario)
         inventario["PRECIO_M2"] = inventario["PRECIO_M2"] * (1 + pvp)
         inventario["PRECIO_TABLA"] = inventario["PRECIO_TABLA"] * (1 + pvp)
+        total = total + inventario["PRECIO_TABLA"].sum()
     if not session.get("suplementos_comprados") is None:
         suplementos = session.get("suplementos_comprados")
         suplementos = pd.read_json(suplementos)
         suplementos["TOTAL"] = suplementos["TOTAL"] * (1 + pvp)
+        total = total + suplementos["TOTAL"].sum()
 
 
     return render_template(template_name_or_list = '00_factura.html',
@@ -80,9 +84,9 @@ def factura():
                            encimeras       = encimeras,
                            inventario      = inventario,
                            suplementos     = suplementos,
-                           total           = "479.07 €",
-                           pagado          = "100.00 €",
-                           a_pagar         = "379.07 €",
+                           total           = str(total)+ " €",
+                           pagado          = "0.00 €",
+                           a_pagar         = str(total)+ " €",
                            segment         = 'factura')
 
 

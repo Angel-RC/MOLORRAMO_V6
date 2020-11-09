@@ -23,10 +23,7 @@
         <div class="navbar-brand header-logo">
             <a target="_blank" href="http://www.molorramo.com/"
                class="b-brand">
-                <div class="b-bg">
-                    <i class="feather icon-trending-up"></i>
-                </div>
-                <span class="b-title">Molorramo</span>
+                <span class="b-title"></span>
             </a>
             <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
         </div>
@@ -38,9 +35,10 @@
                             class="feather icon-home"></i></span><span class="pcoded-mtext">Sección</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="/" class="">Encimeras</a></li>
-                        <li class=""><a href="/inventario" class="">Inventario</a></li>
                         <li class=""><a href="/suplementos" class="">Suplementos</a></li>
-                        <li class=""><a href="/revestimiento" class="">Revestimiento</a></li>
+                     <!--   <li class=""><a href="/inventario" class="">Inventario</a></li>
+
+                        <li class=""><a href="/revestimiento" class="">Revestimiento</a></li> -->
                         <li class="active"><a href="/factura" class="">Mi pedido</a></li>
                     </ul>
                 </li>
@@ -51,14 +49,16 @@
                 <label class="pcoded-menu-caption">P.V.P.</label>
                 {{form.pvp( class="form-control mb-3", onchange="submit()")}}
                 <br><br>
-<button type="submit" name="confirmar" class="btn btn-primary shadow-2 mb-4">Confirmar pedido</button>
+                <button type="button" id="imprimir" class="btn btn-primary btn-print-invoice m-b-10">Imprimir</button>
+
             </div>
-        </div>
+            </div>
     </div>
 </nav>
+
 <section class="pcoded-main-container" id="print_this">
     <div id="container">
-        <table class="top" width="100%" style="margin: 0px;">
+         <table class="top" width="100%" style="margin: 0px;">
             <tr class="row">
                 <td>
                     <section id="invoice-title-number">
@@ -172,11 +172,9 @@
         <br>
     </div>
 </section>
-      <div class="row text-center">
-                                            <div class="col-sm-12 invoice-btn-group text-center">
-                                                <button type="button" class="btn btn-primary btn-print-invoice m-b-10">Imprimir</button>
-                                            </div>
-                                        </div>
+
+
+
 </form>
 {% endblock content %}
 
@@ -230,7 +228,7 @@
  <script>
     // print button
 
-        $('.btn-print-invoice').on('click', function() {
+        $('#imprimir').on('click', function() {
             $('#container').printThis();
         })
 
