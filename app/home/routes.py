@@ -30,9 +30,8 @@ def factura():
 
 
 @blueprint.route('/encimeras', methods = ["POST", "GET"])
-@login_required
 def index():
-    return({})
+    return app.send_static_file("index.html")
 
 
 @blueprint.route('/inventario', methods=["POST", "GET"])
