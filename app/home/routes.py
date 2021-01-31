@@ -19,75 +19,11 @@ import pandas as pd
 from functions.functions import *
 from datetime import date
 
-today = date.today().strftime("%d/%m/%Y")
-
-class empresa:
-    def __init__(self, name, address, tlfno, mail):
-        self.name = name
-        self.address = address
-        self.tlfno = tlfno
-        self.mail = mail
-
-df, suplementos, fregaderos, sobrante, revestimiento = read_data()
-
 
 @blueprint.route('/factura', methods = ["POST", "GET"])
 @login_required
 def factura():
-    form = FacturasForm()
-
-    molorramo = empresa(name = "Molorramo",
-                        address = "Mota del Cuervo (Cuenca)",
-                        tlfno = "666666666",
-                        mail = "mariluz@molorramo.com")
-
-    cliente = empresa(name = "Cliente 1",
-                        address = "Burjassot (Valencia)",
-                        tlfno = "999999999",
-                        mail = "cristina@cliente1.com")
-
-    encimeras   = pd.DataFrame()
-    inventario  = pd.DataFrame()
-    suplementos = pd.DataFrame()
-
-    pvp = 0.0
-    total = 0.0
-    if form.validate_on_submit():
-        pvp = form.pvp.data / 100
-
-    if not session.get("encimeras_compradas") is None:
-        encimeras = session.get("encimeras_compradas")
-        encimeras = pd.read_json(encimeras)
-        encimeras["TOTAL"] = encimeras["TOTAL"] * (1 + pvp)
-        encimeras["PRECIO_METRO"] = encimeras["PRECIO_METRO"] * (1 + pvp)
-        total = total + encimeras["TOTAL"].sum()
-    if not session.get("inventario_comprado") is None:
-        inventario = session.get("inventario_comprado")
-        inventario = pd.read_json(inventario)
-        inventario["PRECIO_M2"] = inventario["PRECIO_M2"] * (1 + pvp)
-        inventario["PRECIO_TABLA"] = inventario["PRECIO_TABLA"] * (1 + pvp)
-        total = total + inventario["PRECIO_TABLA"].sum()
-    if not session.get("suplementos_comprados") is None:
-        suplementos = session.get("suplementos_comprados")
-        suplementos = pd.read_json(suplementos)
-        suplementos["TOTAL"] = suplementos["TOTAL"] * (1 + pvp)
-        total = total + suplementos["TOTAL"].sum()
-
-
-    return render_template(template_name_or_list = '00_factura.html',
-                           Molorramo       = molorramo,
-                           Cliente         = cliente,
-                           id_factura      = 123123,
-                           view_html_table = view_html_table,
-                           today           = today,
-                           form            = form,
-                           encimeras       = encimeras,
-                           inventario      = inventario,
-                           suplementos     = suplementos,
-                           total           = str(total)+ " €",
-                           pagado          = "0.00 €",
-                           a_pagar         = str(total)+ " €",
-                           segment         = 'factura')
+    return({})
 
 
 
@@ -96,106 +32,25 @@ def factura():
 @blueprint.route('/encimeras', methods = ["POST", "GET"])
 @login_required
 def index():
-    if not current_user.is_authenticated:
-        return redirect(url_for('base_blueprint.login'))
-
-
-
-    form = SelectionEncimerasForm()
-
-
-    form.material.choices = [(item,item) for item in df["MATERIAL"].unique().tolist()]
-    form.color.choices    = [(item,item) for item in df["COLOR"].unique().tolist()]
-    form.acabado.choices  = [(item,item) for item in df["ACABADO"].unique().tolist()]
-    form.grosor.choices   = [(item,item) for item in df["GROSOR"].unique().tolist()]
-
-    tabla = pd.DataFrame()
-    if form.validate_on_submit():
-
-        tabla = filter_data(df, form)
-        form = actualizar_items(form, tabla)
-        tabla = calcular_precio(tabla,
-                                form.lineales.data,
-                                form.cuadrados.data,
-                                form.frentes.data)
-        tabla = mis_encimeras(tabla,
-                                form.lineales.data,
-                                form.cuadrados.data,
-                                form.frentes.data)
-
-    if "carrito" in request.form:
-        encimeras = actualizar_session(session, "encimeras_compradas", tabla)
-
-
-    return render_template(template_name_or_list = '00_encimeras.html',
-                           view_html_table       = view_html_table,
-                           table                 = tabla,
-                           form                  = form,
-                           segment               = 'index')
+    return({})
 
 
 @blueprint.route('/inventario', methods=["POST", "GET"])
 @login_required
 def page_inventario():
-    if not current_user.is_authenticated:
-        return redirect(url_for('base_blueprint.login'))
-
-    form = SelectionInventarioForm()
-
-    form.material.choices = [(item, item) for item in sobrante["MATERIAL"].unique().tolist()]
-    form.color.choices    = [(item, item) for item in sobrante["COLOR"].unique().tolist()]
-    form.acabado.choices  = [(item, item) for item in sobrante["ACABADO"].unique().tolist()]
-    form.grosor.choices   = [(item, item) for item in sobrante["GROSOR"].unique().tolist()]
-    form.medida.choices   = [(item, item) for item in sobrante["MEDIDA_PIEZA"].unique().tolist()]
-
-    tabla = sobrante
-    if form.validate_on_submit():
-        tabla = filter_inventario(tabla, form)
-        form = actualizar_items(form, tabla)
-        form.medida.choices = [(item, item) for item in tabla["MEDIDA_PIEZA"].unique().tolist()]
-
-    if "carrito" in request.form:
-        carrito = actualizar_session(session, "inventario_comprado", tabla)
-
-    return render_template(template_name_or_list = '00_inventario.html',
-                           view_html_table       = view_html_table,
-                           table                 = tabla,
-                           form                  = form,
-                           segment               = 'inventario')
+    return({})
 
 
 @blueprint.route('/suplementos', methods=["POST", "GET"])
 @login_required
 def page_suplementos():
-    if not current_user.is_authenticated:
-        return redirect(url_for('base_blueprint.login'))
-
-    form = SelectionSuplementosForm()
-
-    form.concepto.choices = [(item, item) for item in suplementos["CONCEPTO"].unique().tolist()]
-
-    tabla = suplementos
-    if form.validate_on_submit():
-        tabla = tabla[tabla['CONCEPTO'].isin(form.concepto.data)]
-
-        tabla["CANTIDAD"] = str(form.cantidad.data) + " " + tabla["TIPO_COSTE"]
-        tabla["TOTAL"] = form.cantidad.data * tabla["PRECIO_UNIDAD"]
-
-    if "carrito" in request.form:
-        carrito = actualizar_session(session, "suplementos_comprados", tabla)
-
-    return render_template(template_name_or_list = '00_suplementos.html',
-                           view_html_table       = view_html_table,
-                           table                 = tabla,
-                           form                  = form,
-                           segment               = 'suplementos')
+    return({})
 
 
 @blueprint.route('/panel', methods=["POST", "GET"])
 @login_required
 def panel():
-    return render_template(template_name_or_list = '00_panel.html',
-                           segment               = 'panel')
+    return({})
 
 
 
