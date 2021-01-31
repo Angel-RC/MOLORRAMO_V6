@@ -73,7 +73,7 @@ def apply_themes(app):
         return url_for(endpoint, **values)
 
 def create_app(config, selenium=False):
-    app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+    app = Flask(__name__, static_url_path='', static_folder='../frontend/build')
     app.config.from_object(config)
     mail = Mail(app)
     if selenium:
