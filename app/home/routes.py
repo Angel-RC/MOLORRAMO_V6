@@ -202,43 +202,8 @@ def panel():
 @blueprint.route('/presupuestos', methods=["POST", "GET"])
 @login_required
 def page_presupuestos():
-    if not current_user.is_authenticated:
-        return redirect(url_for('base_blueprint.login'))
-
-    form = PresupuestosForm()
-
-    encimeras   = pd.DataFrame()
-    inventario  = pd.DataFrame()
-    suplementos = pd.DataFrame()
-
-    pvp = 0.0
-    if form.validate_on_submit():
-        pvp = form.pvp.data / 100
-
-
-    if not session.get("encimeras_compradas") is None:
-        encimeras = session.get("encimeras_compradas")
-        encimeras = pd.read_json(encimeras)
-        encimeras["TOTAL"] = encimeras["TOTAL"] * (1 + pvp)
-        encimeras["PRECIO_METRO"] = encimeras["PRECIO_METRO"] * (1 + pvp)
-    if not session.get("inventario_comprado") is None:
-        inventario = session.get("inventario_comprado")
-        inventario = pd.read_json(inventario)
-        inventario["PRECIO_M2"] = inventario["PRECIO_M2"] * (1 + pvp)
-        inventario["PRECIO_TABLA"] = inventario["PRECIO_TABLA"] * (1 + pvp)
-    if not session.get("suplementos_comprados") is None:
-        suplementos = session.get("suplementos_comprados")
-        suplementos = pd.read_json(suplementos)
-        suplementos["TOTAL"] = suplementos["TOTAL"] * (1 + pvp)
-
-    return render_template(template_name_or_list = '00_presupuestos.html',
-                           view_html_table       = view_html_table,
-                           encimeras             = encimeras,
-                           suplementos           = suplementos,
-                           inventario            = inventario,
-                           form                  = form,
-                           segment               = 'presupuestos')
-
+   
+   return({})
 #
 # @blueprint.route('/encimeras2', methods=["POST", "GET"])
 # @login_required
