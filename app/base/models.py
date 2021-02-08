@@ -24,6 +24,7 @@ class User(db.Model, UserMixin):
     password = Column(Binary)
     level    = Column(Integer, nullable = True, default = 0)
     pedidos  = relationship("Pedido",  back_populates="User")
+    #pvp      = Column(Float, nullable = False, default = 0)
 
 
     def __init__(self, **kwargs):

@@ -11,5 +11,5 @@ blueprint = Blueprint(
     __name__,
     url_prefix='',
     template_folder='templates',
-    static_folder='../frontend/build'
+    static_folder='../../frontend/build'
 )

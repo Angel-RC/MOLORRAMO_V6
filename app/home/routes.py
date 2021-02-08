@@ -17,125 +17,118 @@ from jinja2 import TemplateNotFound
 import numpy as np
 import pandas as pd
 from functions.functions import *
+from app.base.models import Pedido
 from datetime import date
 
 
-@blueprint.route('/factura', methods = ["POST", "GET"])
-@login_required
-def factura():
-    return({})
+@blueprint.route('/filter_data', methods = ["POST", "GET"])
+def filter_data():
+    body = request.get_json(force= True)
+    data = pd.DataFrame(body["data"])
+    data_filter = data
+    for key, value in body["Filtros"].items():
+
+        if len(value) > 0 and (key.upper() in data_filter.columns):
+            filtro = pd.DataFrame.from_records(value)
+            filtro = filtro["value"].to_list()
+
+            data_filter = data_filter[data_filter[key.upper()].isin(filtro)]
+
+
+    if (body["page"] == "suplementos"):
+        data_filter["CANTIDAD"] = body["Filtros"]["cantidad"][0] + " " + data_filter["TIPO_COSTE"]
+        data_filter["TOTAL"] = int(body["Filtros"]["cantidad"][0]) * data_filter["PRECIO_UNIDAD"]
+
+    options = {}
+    options["material"] = get_options(data, "MATERIAL")
+    options["concepto"] = get_options(data, "CONCEPTO")
+    options["color"] = get_options(data_filter, "COLOR")
+    options["acabado"] = get_options(data_filter, "ACABADO")
+    options["medida"] = get_options(data_filter, "MEDIDA")
+    options["grosor"] = get_options(data_filter, "GROSOR")
+    options["grupo"] = get_options(data_filter, "grupo")
+    options["idpedido"] = get_options(data_filter, "id_pedido")
+    options["usuario"] = get_options(data_filter, "usuario")
+    options["estado"] = get_options(data_filter, "estado")
+
+
+    data_filter = convertPandasToJson(data_filter)
+
+    return {"data": data_filter,
+            "options": options}
+
+
+@blueprint.route('/create_data_inicial', methods = ["POST", "GET"])
+def create_data_inicial():
+    body = request.get_json(force=True)
+
+    data = pd.read_excel("./data/angel_pruebas.xlsx", sheet_name = body["page"])
+
+
+    if (body["page"] == "inventario"):
+        data = calcular_precio_inventario(data)
+    if (body["page"] == "encimeras"):
+
+        if float(body["Metros"]["lineales"]) + float(body["Metros"]["cuadrados"]) + float(body["Metros"]["frente"]) > 0:
+            if body["Metros"]["promocion"]:
+                data = data[data["MAXIMO_SOBRANTE"] == 0]
+            if float(body["Metros"]["lineales"])>0 and (float(body["Metros"]["cuadrados"]) + float(body["Metros"]["frente"])) == 0:
+                body["Metros"]["lineales"] = max(3, float(body["Metros"]["lineales"]))
+
+            data = calcular_precio(data,
+                                   float(body["Metros"]["lineales"]),
+                                   float(body["Metros"]["cuadrados"]),
+                                   float(body["Metros"]["frente"]))
+
+            data = mis_encimeras(data,
+                                 float(body["Metros"]["lineales"]),
+                                 float(body["Metros"]["cuadrados"]),
+                                 float(body["Metros"]["frente"]))
+
+        else:
+            data = []
+
+    options = {}
+    options["material"] = get_options(data, "MATERIAL")
+    options["color"] = get_options(data, "COLOR")
+    options["acabado"] = get_options(data, "ACABADO")
+    options["concepto"] = get_options(data, "CONCEPTO")
+    options["medida"] = get_options(data, "MEDIDA")
+    options["grosor"] = get_options(data, "GROSOR")
+
+
+
+    data = data.rename(columns={'PRECIO': 'TOTAL'})
+    data = convertPandasToJson(data)
+
+
+    return {"data": data,
+            "options": options}
 
 
 
 
 
-@blueprint.route('/encimeras', methods = ["POST", "GET"])
-def index():
-    return app.send_static_file("index.html")
-
-
-@blueprint.route('/inventario', methods=["POST", "GET"])
-@login_required
-def page_inventario():
-    return({})
-
-
-@blueprint.route('/suplementos', methods=["POST", "GET"])
-@login_required
-def page_suplementos():
-    return({})
-
-
-@blueprint.route('/panel', methods=["POST", "GET"])
-@login_required
-def panel():
-    return({})
 
 
 
-@blueprint.route('/presupuestos', methods=["POST", "GET"])
-@login_required
-def page_presupuestos():
-   
-   return({})
-#
-# @blueprint.route('/encimeras2', methods=["POST", "GET"])
-# @login_required
-# def index2():
-#     users_schema = UserSchema(many=True)
-#     tabla = User.query.all()
-#
-#     return render_template(template_name_or_list='01_prueba.html',
-#                            data=tabla,
-#                            segment='index')
-#
-#
-# @blueprint.route('/livesearch', methods=["POST", "GET"])
-# @login_required
-# def index3():
-#     from os import environ
-#     from sqlalchemy import create_engine, MetaData, Table
-#     from sqlalchemy.orm import scoped_session, sessionmaker
-#     SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format(
-#         environ.get('APPSEED_DATABASE_USER', 'wexblshovbqplg'),
-#         environ.get('APPSEED_DATABASE_PASSWORD', 'd2f882c81122eecf11e18c38d45dd07fc0edb3e577f2870429f75a8f9446d1c2'),
-#         environ.get('APPSEED_DATABASE_HOST', 'ec2-54-217-206-236.eu-west-1.compute.amazonaws.com'),
-#         environ.get('APPSEED_DATABASE_PORT', 5432),
-#         environ.get('APPSEED_DATABASE_NAME', 'd561hb6caco114'))
-#     engine = create_engine(SQLALCHEMY_DATABASE_URI)
-#
-#     da = pd.read_sql('encimeras', engine)
-#
-#     return (da.to_json(orient="records"))
-#
-#
-# @blueprint.route('/prueba', methods=["POST", "GET"])
-# @login_required
-# def page_pruebas():
-#     if not current_user.is_authenticated:
-#         return redirect(url_for('base_blueprint.login'))
-#
-#     ma = Marshmallow()
-#     SuplementForm = SelectionProductForm()
-#
-#     tabla = Encimeras.query.filter_by(MATERIAL="DEKTON").all()
-#
-#     from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field
-#
-#     class UserSchema(ma.ModelSchema):
-#         class Meta:
-#             model = User
-#
-#     users_schema = UserSchema()
-#     all_users = User.query.first()
-#     out = users_schema.dump(all_users).data
-#     data = jsonify({"user": out})
-#
-#     return render_template(template_name_or_list='00_prueba.html',
-#                            view_html_table=view_html_table,
-#                            users=tabla,
-#                            data=data,
-#                            SelectForm=SuplementForm,
-#                            segment='prueba')
-#
-#
-# @blueprint.route('/<template>')
-# def route_template(template):
-#     if not current_user.is_authenticated:
-#         return redirect(url_for('base_blueprint.login'))
-#
-#     try:
-#
-#         # Flexible rendering
-#         # Sample pattern: '/profile' AND '/profile.html'
-#         if not template.endswith('.html'):
-#             template += '.html'
-#
-#         return render_template(template)
-#
-#     except TemplateNotFound:
-#         return render_template('page-404.html'), 404
-#
-#     except:
-#         return render_template('page-500.html'), 500
+@blueprint.route('/mis_pedidos', methods = ["POST", "GET"])
+def mis_pedidos():
+    data = pd.read_sql('pedidos', db.engine)
+    usuarios = pd.read_sql('usuarios', db.engine)
+
+    data = pd.merge(data, usuarios, left_on='id_cliente', right_on='id', how="inner")
+
+    options = {}
+    options["grupo"] = get_options(data, "grupo")
+    options["idpedido"] = get_options(data, "id_pedido")
+    options["usuario"] = get_options(data, "username")
+    options["estado"] = get_options(data, "estado")
+
+
+    data = convertPandasToJson(data)
+
+    return {"data": data,
+            "options": options}
+
 

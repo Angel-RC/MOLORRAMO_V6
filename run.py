@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 from os import environ
 from sys import exit
 
+from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 
 from config import config_dict
@@ -20,7 +21,10 @@ try:
 except KeyError:
     exit('Error: Invalid APPSEED_CONFIG_MODE environment variable entry.')
 
-app = create_app(config_mode) 
+app = create_app(config_mode)
+
+# Settings
+CORS(app)
 ma = Marshmallow(app)
 Migrate(app, db)
 

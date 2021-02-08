@@ -1,119 +1,28 @@
-import numpy as np
+from geopy.geocoders import Nominatim, GoogleV3
 import pandas as pd
+import json
+import numpy as np
+from io import BytesIO
 
+def convertBytesToJson(bytes):
+    df = pd.read_csv(BytesIO(bytes), sep = ";")
+    parsed = convertPandasToJson(df)
+    return parsed
 
-def view_html_table(table, clase="display table table-hover", id = "myTable"):
-    html = table.to_html(classes     = clase,
-                         table_id    = id,
-                         float_format='{:8.2f}€'.format,
-                         header      = True,
-                         na_rep      = "",
-                         index_names = False,
-                         index       = False,
-                         border      = 0,
-                         justify     = "center")
-    return (html)
+def convertPandasToJson(data):
+    result = data.to_json(orient="records")
+    parsed = json.loads(result)
+    return parsed
 
+def get_options(data, variable):
+    options = []
+    if variable in data.columns:
+        options = pd.DataFrame(data[variable].unique(), columns=["label"])
+        options["value"] = options["label"]
 
+        options = convertPandasToJson(options)
 
-def filter_data(datos, SelectForm):
-    filtered_data = datos
-
-    if (len(SelectForm.material.data) > 0 ):
-        filtered_data = filtered_data[filtered_data['MATERIAL'].isin(SelectForm.material.data)]
-    if (len(SelectForm.color.data) > 0  and ('COLOR' in datos.columns)):
-        filtered_data = filtered_data[filtered_data['COLOR'].isin(SelectForm.color.data)]
-    if (len(SelectForm.acabado.data) > 0  and ('ACABADO' in datos.columns)):
-        filtered_data = filtered_data[filtered_data['ACABADO'].isin(SelectForm.acabado.data)]
-    if (len(SelectForm.grosor.data) > 0  and ('GROSOR' in datos.columns)):
-        filtered_data = filtered_data[filtered_data['GROSOR'].isin(SelectForm.grosor.data)]
-
-    if (SelectForm.promocion.data):
-        filtered_data = filtered_data[filtered_data['MAXIMO_SOBRANTE'] < 0.1]
-
-    return (filtered_data)
-
-
-def filter_inventario(datos, SelectForm):
-    filtered_data = datos
-
-    if (len(SelectForm.material.data) > 0 ):
-        filtered_data = filtered_data[filtered_data['MATERIAL'].isin(SelectForm.material.data)]
-    if (len(SelectForm.color.data) > 0  and ('COLOR' in datos.columns)):
-        filtered_data = filtered_data[filtered_data['COLOR'].isin(SelectForm.color.data)]
-    if (len(SelectForm.acabado.data) > 0  and ('ACABADO' in datos.columns)):
-        filtered_data = filtered_data[filtered_data['ACABADO'].isin(SelectForm.acabado.data)]
-    if (len(SelectForm.grosor.data) > 0 and ('GROSOR' in datos.columns)):
-        filtered_data = filtered_data[filtered_data['GROSOR'].isin(SelectForm.grosor.data)]
-    if (len(SelectForm.medida.data) > 0  and ('MEDIDA_PIEZA' in datos.columns)):
-        filtered_data = filtered_data[filtered_data['MEDIDA_PIEZA'].isin(SelectForm.medida.data)]
-
-    return (filtered_data)
-
-
-def actualizar_items(form, tabla):
-
-    form.color.choices    = [(item,item) for item in tabla["COLOR"].unique().tolist()]
-    form.acabado.choices  = [(item,item) for item in tabla["ACABADO"].unique().tolist()]
-    form.grosor.choices   = [(item,item) for item in tabla["GROSOR"].unique().tolist()]
-    return(form)
-
-def actualizar_session(session, object, tabla):
-    sesion_table = pd.DataFrame()
-    if not session.get(object) is None:
-        sesion_table = session.get(object)
-        sesion_table = pd.read_json(sesion_table)
-
-    tabla = pd.concat([tabla, sesion_table])
-    session[object] = tabla.to_json(orient='records')
-
-    return(tabla)
-
-
-def read_data():
-
-    datos = pd.read_excel(io         = "data/Molorramo_productos.xlsx",
-                          sheet_name = "productos_molorramo")\
-        .fillna(" ")\
-        .assign(hack='')\
-        .set_index('hack')
-
-    suplementos = pd.read_excel(io="data/Molorramo_productos.xlsx",
-                                sheet_name="suplementos")
-
-    revestimiento = pd.read_excel(io="data/Molorramo_productos.xlsx",
-                                sheet_name="revestimiento") \
-        .fillna(" ") \
-        .assign(hack='') \
-        .set_index('hack')
-
-    fregaderos = pd.read_excel(io         = "data/Molorramo_productos.xlsx",
-                               sheet_name = "fregaderos")\
-        .fillna(" ")\
-        .assign(hack='')\
-        .set_index('hack')
-
-    sobrante = pd.read_excel(io         = "data/Molorramo_productos.xlsx",
-                             sheet_name = "piezas_sobrantes")
-
-
-    sobrante["LARGO"] = sobrante["LARGO"] / 100
-
-    sobrante["ANCHO"] = sobrante["ANCHO"] / 100
-    sobrante  = sobrante[sobrante["FECHA_SALIDA"].isnull()].fillna(" ")
-    sobrante["VENDIDO"] = False
-    sobrante["MEDIDA_PIEZA"] = sobrante['LARGO'].map(str) + ' X ' + sobrante['ANCHO'].map(str)
-    sobrante = pd.merge(sobrante, datos, how='left',
-                        on=["MATERIAL", "COLOR", "GROSOR", "ACABADO"]).assign(hack='').set_index('hack')
-
-    sobrante["PRECIO_M2"] =sobrante["PRECIO_M2"] * 0.75
-    sobrante.loc[sobrante["PRECIO_M2"].isnull(), 'PRECIO_M2'] = 250
-
-    sobrante["PRECIO_METRO"] = sobrante["PRECIO_M2"]
-    sobrante["PRECIO_TABLA"] = sobrante["PRECIO_METRO"] * sobrante["LARGO"] * sobrante["ANCHO"]
-    sobrante = sobrante[["MATERIAL", "COLOR", "ACABADO", "GROSOR", "MEDIDA_PIEZA", "PRECIO_M2",
-         "PRECIO_TABLA"]]
-    return (datos, suplementos, fregaderos, sobrante, revestimiento)
+    return options
 
 
 
@@ -149,6 +58,8 @@ def calcular_precio(datos, metros_lineales, metros_cuadrados, metros_frente):
 
 
 
+
+
 def mis_encimeras(mis_productos,metros_lineales, metros_cuadrados, metros_frente):
     mis_productos_style = pd.DataFrame()
     if (metros_lineales + metros_cuadrados + metros_frente > 0):
@@ -178,3 +89,39 @@ def mis_encimeras(mis_productos,metros_lineales, metros_cuadrados, metros_frente
              "TOTAL"]]
 
     return(mis_productos_style)
+
+
+
+def calcular_precio_inventario(data):
+
+    data = data[data.MATERIAL.notnull()]
+
+
+
+
+    datos = pd.read_excel("./data/angel_pruebas.xlsx", sheet_name = "encimeras") \
+        .fillna(" ") \
+        .assign(hack='') \
+        .set_index('hack')
+
+
+    data["LARGO"] = data["LARGO"] / 100
+
+    data["ANCHO"] = data["ANCHO"] / 100
+    data = data[data["FECHA_SALIDA"].isnull()].fillna(" ")
+    data["VENDIDO"] = False
+    data["MEDIDA_PIEZA"] = data['LARGO'].map(str) + ' X ' + data['ANCHO'].map(str)
+    data = pd.merge(data, datos, how='left',
+                    on=["MATERIAL", "COLOR", "GROSOR", "ACABADO"]).assign(hack='').set_index('hack')
+
+    data["PRECIO_M2"] = data["PRECIO_M2"] * 0.75
+    data.loc[data["PRECIO_M2"].isnull(), 'PRECIO_M2'] = 250
+
+    data["PRECIO_METRO"] = data["PRECIO_M2"]
+    data["PRECIO_TABLA"] = data["PRECIO_METRO"] * data["LARGO"] * data["ANCHO"]
+    data = data[["MATERIAL", "COLOR", "ACABADO", "GROSOR", "MEDIDA_PIEZA", "PRECIO_M2",
+                 "PRECIO_TABLA", "FECHA_ENTRADA", "FECHA_SALIDA", "ID"]]
+
+    data = data.rename(columns={'MEDIDA_PIEZA': 'MEDIDA', "PRECIO_TABLA": "TOTAL"})
+
+    return data

@@ -5,6 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 from threading import Thread
 import flask_mail
+import pandas as pd
 from app.base.util import hash_pass
 from flask import jsonify, render_template, redirect, request, url_for
 from flask_login import (
@@ -18,7 +19,7 @@ from app import db, login_manager
 from app.base import blueprint
 from app.base.forms import LoginForm, CreateAccountForm
 from app.base.models import User
-
+from functions.functions import *
 from app.base.util import verify_pass
 
 @blueprint.route('/')
@@ -33,51 +34,43 @@ def route_errors(error):
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    login_form = LoginForm(request.form)
-    if 'login' in request.form:
-        
-        # read form data
-        email = request.form['email']
-        password = request.form['password']
 
-        # Locate user
-        user = User.query.filter_by(email=email).first()
-        
-        # Check the password
-        if user and verify_pass( password, user.password):
+    body = request.get_json(force=True)
 
-            login_user(user)
-            return redirect(url_for('base_blueprint.route_default'))
+    email = body['email']
+    password = body['password']
 
-        # Something (user or pass) is not ok
-        return render_template( 'accounts/login.html', msg='Email o  contraseña incorrectos', form=login_form)
+    # Locate user
+    print(email)
+    user = User.query.filter_by(email=email).first()
+    print(user)
+    if user and password == "qqqq":
 
-    if not current_user.is_authenticated:
-        return render_template( 'accounts/login.html',
-                                form=login_form)
-    return redirect(url_for('home_blueprint.index'))
+        return {"email": user.email,
+                "level": user.level,
+                "username": user.username}
+
+    return {"msg": "Error",
+            "status": 0}
+
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
-    create_account_form = CreateAccountForm(request.form)
-    if 'register' in request.form:
+    body = request.get_json(force=True)
 
-        email     = request.form['email']
+    email = body['email']
+    password = body["password"]
 
-        user = User.query.filter_by(email=email).first()
-        if user:
-            return render_template( 'accounts/register.html', msg='Email ya registrado', form=create_account_form)
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return {"msg": 'Email ya registrado'}
 
         # else we can create the user
-        user = User(**request.form)
-        db.session.add(user)
-        db.session.commit()
+    user = User(email=email, password=password)
+    db.session.add(user)
+    db.session.commit()
 
-        return render_template( 'accounts/register.html', msg='Cuenta creada, por favor  <a href="/login">Acceda</a>', form=create_account_form)
-
-    else:
-        return render_template( 'accounts/register.html', form=create_account_form)
-
+    return ({'Bien. Email registrado'})
 
 
 @blueprint.route('/reset_password', methods=['GET', 'POST'])
