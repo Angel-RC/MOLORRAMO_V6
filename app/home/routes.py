@@ -21,6 +21,12 @@ from app.base.models import Pedido
 from datetime import date
 
 
+
+@blueprint.route('/', methods = ["POST", "GET"])
+def index():
+    return{}
+
+
 @blueprint.route('/filter_data', methods = ["POST", "GET"])
 def filter_data():
     body = request.get_json(force= True)
